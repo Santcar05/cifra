@@ -1,0 +1,43 @@
+---
+/**
+ * Cierre. H2 corto, un botón, la línea de "sin tarjeta". Nada más.
+ *
+ * La contención es el punto: después de seis secciones de argumento, meter
+ * aquí tres columnas de enlaces o un formulario largo diluye la única
+ * acción que queremos.
+ */
+---
+
+<section class="full band band--ink section cierre reveal">
+  <div class="inner cierre__inner">
+    <h2 class="h2 cierre__title">Conecta una cuenta y mira qué encuentra.</h2>
+
+    <a class="btn btn--primary cierre__cta" href="/empezar">Empieza gratis</a>
+
+    <p class="cierre__note">
+      Sin tarjeta, y sin permiso para mover tu dinero.
+    </p>
+  </div>
+</section>
+
+<style>
+  .cierre__inner {
+    display: grid;
+    justify-items: start;
+    gap: 0;
+  }
+
+  .cierre__title {
+    max-width: 16ch;
+  }
+
+  .cierre__cta {
+    margin-block-start: 36px;
+  }
+
+  .cierre__note {
+    font-size: 14px;
+    color: var(--on-ink-caption);
+    margin-block-start: 22px;
+  }
+</style>

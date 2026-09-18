@@ -1,0 +1,390 @@
+---
+/**
+ * /empezar — la página de conversión.
+ *
+ * NO es un formulario de registro largo. El héroe promete "sin tarjeta,
+ * conecta una cuenta y mira qué encuentra", y esa frase define la página:
+ * pedir lo mínimo y enseñar lo que pasa después.
+ *
+ * Las garantías van PEGADAS AL BOTÓN, no en el pie. Conectar una cuenta
+ * bancaria es el momento de más ansiedad de todo el embudo, y una garantía
+ * a tres pantallas de scroll del punto de fricción no tranquiliza a nadie.
+ *
+ * Mismo flujo para los tres roles: el independiente, la empresa y el
+ * contador entran por aquí y la diferenciación ocurre dentro del producto.
+ */
+import Layout from '@components/layout/Layout.astro';
+import Header from '@components/layout/Header.astro';
+import Footer from '@components/layout/Footer.astro';
+import LogoWall from '@components/layout/LogoWall.astro';
+import Icon from '@components/ui/Icon.astro';
+
+const garantias = [
+  { icon: 'eye' as const, text: 'Acceso de solo lectura. CIFRA ve tus movimientos, nunca puede moverlos.' },
+  { icon: 'lock' as const, text: 'No custodiamos tu dinero. Sigue donde está, en tu banco.' },
+  { icon: 'rotate-ccw' as const, text: 'Desconectas cuando quieras, sin llamar a nadie.' },
+];
+
+const pasos = [
+  {
+    n: '01',
+    title: 'Creas la cuenta',
+    body: 'Solo tu correo. Sin tarjeta y sin datos de facturación.',
+  },
+  {
+    n: '02',
+    title: 'Conectas un banco',
+    body: 'Nequi, Bancolombia, Wise o el que uses. Permiso de lectura, que puedes revocar.',
+  },
+  {
+    n: '03',
+    title: 'Ves qué encuentra',
+    body: 'Los pagos que no cuadran con ninguna factura, y cuánto de tu saldo no es tuyo.',
+  },
+];
+---
+
+<Layout
+  title="Empieza gratis — CIFRA"
+  description="Crea tu cuenta con el correo, conecta un banco con permiso de solo lectura y mira qué encuentra CIFRA en tus pagos. Sin tarjeta."
+>
+  <Header />
+
+  <main id="contenido" class="page">
+    <section class="full band section empezar" aria-labelledby="empezar-h">
+      <div class="inner empezar__grid">
+        <div class="empezar__col">
+          <h1 id="empezar-h" class="empezar__title">
+            Conecta una cuenta y mira qué encuentra.
+          </h1>
+
+          <hr class="rule-olive" />
+
+          <p class="lede">
+            Tres minutos. Sin tarjeta y sin compromiso: si no encuentra nada
+            que te sirva, cierras la pestaña y ya está.
+          </p>
+
+          {/* TODO(backend): apuntar `action` al endpoint de alta cuando
+              exista. Hoy el formulario valida en cliente y no envía a
+              ninguna parte — deliberadamente, en vez de fingir un alta
+              que no ocurre. */}
+          <form class="signup" novalidate>
+            <label class="signup__label" for="correo">Tu correo</label>
+
+            <div class="signup__row">
+              <input
+                class="signup__input"
+                id="correo"
+                name="correo"
+                type="email"
+                inputmode="email"
+                autocomplete="email"
+                placeholder="nombre@correo.com"
+                required
+                aria-describedby="correo-error"
+              />
+              <button class="btn btn--ink signup__submit" type="submit">
+                Crear cuenta
+                <Icon name="arrow-right" size={16} />
+              </button>
+            </div>
+
+            {/* role="alert" hace que el lector de pantalla lo anuncie al
+                aparecer, sin que el usuario tenga que ir a buscarlo. */}
+            <p class="signup__error" id="correo-error" role="alert" hidden></p>
+          </form>
+
+          <ul class="garantias">
+            {garantias.map((g) => (
+              <li class="garantia">
+                <Icon name={g.icon} size={18} class="garantia__icon" />
+                <span>{g.text}</span>
+              </li>
+            ))}
+          </ul>
+
+          <p class="empezar__legal">
+            Al crear la cuenta aceptas los
+            <a href="/legal/terminos">términos</a> y la
+            <a href="/legal/privacidad">política de privacidad</a>.
+          </p>
+        </div>
+
+        <aside class="empezar__col" aria-labelledby="pasos-h">
+          <h2 id="pasos-h" class="pasos__title">Qué pasa después</h2>
+
+          <ol class="pasos">
+            {pasos.map((p) => (
+              <li class="paso">
+                <span class="paso__n">{p.n}</span>
+                <div>
+                  <h3 class="paso__title">{p.title}</h3>
+                  <p class="paso__body">{p.body}</p>
+                </div>
+              </li>
+            ))}
+          </ol>
+
+          <p class="pasos__foot">
+            CIFRA prepara, calcula y documenta. No sustituye a tu contador,
+            que es quien firma la declaración.
+          </p>
+        </aside>
+      </div>
+    </section>
+
+    <LogoWall />
+  </main>
+
+  <Footer />
+</Layout>
+
+<style>
+  .empezar__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 54fr) minmax(0, 46fr);
+    gap: clamp(40px, 6vw, 96px);
+    align-items: start;
+  }
+
+  .empezar__title {
+    font-size: clamp(32px, 4.4vw, 54px);
+    line-height: 1.06;
+    letter-spacing: -0.03em;
+    font-weight: 500;
+    max-width: 16ch;
+  }
+
+  /* --- El formulario ---------------------------------------------------- */
+  .signup {
+    margin-block-start: clamp(28px, 3vw, 40px);
+  }
+
+  .signup__label {
+    display: block;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-secondary);
+    margin-block-end: 8px;
+  }
+
+  .signup__row {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .signup__input {
+    flex: 1 1 15rem;
+    min-width: 0;
+    min-height: 46px;
+    padding-inline: 14px;
+    background: var(--surface);
+    border: 1px solid var(--line-strong);
+    border-radius: var(--radius);
+    color: var(--ink);
+    font-size: 15px;
+    transition: border-color var(--dur-hover) var(--ease-out);
+  }
+
+  .signup__input::placeholder {
+    color: var(--text-muted);
+  }
+
+  .signup__input:focus-visible {
+    border-color: var(--olive-700);
+  }
+
+  /* aria-invalid es la fuente de verdad del estado de error: el estilo
+     cuelga del atributo que ya tiene que existir por accesibilidad, en vez
+     de una clase paralela que puede desincronizarse. */
+  .signup__input[aria-invalid='true'] {
+    border-color: var(--state-bad);
+  }
+
+  .signup__submit {
+    flex: none;
+    gap: 8px;
+  }
+
+  .signup__error {
+    margin-block-start: 10px;
+    font-size: 13px;
+    color: var(--text-secondary);
+  }
+
+  /* Rojo solo cuando hay algo que el usuario deba corregir. Un aviso
+     nuestro no se le pinta a él como si fuera su culpa. */
+  .signup__error[data-kind='error'] {
+    color: var(--state-bad);
+  }
+
+  /* --- Las garantías, pegadas al botón ----------------------------------- */
+  .garantias {
+    list-style: none;
+    margin: clamp(26px, 3vw, 36px) 0 0;
+    padding: 0;
+    display: grid;
+    gap: 13px;
+    max-width: 46ch;
+  }
+
+  .garantia {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 11px;
+    align-items: start;
+    font-size: 14px;
+    line-height: 1.55;
+    color: var(--text-secondary);
+  }
+
+  .garantia :global(.garantia__icon) {
+    color: var(--olive-700);
+    margin-block-start: 1px;
+  }
+
+  .empezar__legal {
+    margin-block-start: 26px;
+    font-size: 13px;
+    color: var(--text-secondary);
+  }
+
+  .empezar__legal a {
+    color: var(--ink);
+    text-decoration: underline;
+    text-decoration-color: var(--olive-700);
+    text-underline-offset: 0.25em;
+  }
+
+  /* --- Qué pasa después -------------------------------------------------- */
+  .pasos__title {
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--text-secondary);
+    padding-block-end: 16px;
+    border-block-end: 1px solid var(--line);
+  }
+
+  .pasos {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+  }
+
+  .paso {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 16px;
+    padding-block: 22px;
+    border-block-end: 1px solid var(--line);
+  }
+
+  .paso__n {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    font-variant-numeric: tabular-nums;
+    color: var(--olive-700);
+    padding-block-start: 2px;
+  }
+
+  .paso__title {
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--ink);
+  }
+
+  .paso__body {
+    margin-block-start: 5px;
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--text-secondary);
+  }
+
+  .pasos__foot {
+    margin-block-start: 22px;
+    font-size: 13px;
+    line-height: 1.6;
+    color: var(--text-secondary);
+  }
+
+  @media (width < 62rem) {
+    .empezar__grid {
+      grid-template-columns: 1fr;
+    }
+
+    .empezar__title {
+      max-width: 20ch;
+    }
+  }
+</style>
+
+<script>
+  import '../scripts/reveal';
+
+  const form = document.querySelector<HTMLFormElement>('.signup');
+  const input = document.querySelector<HTMLInputElement>('#correo');
+  const error = document.querySelector<HTMLElement>('#correo-error');
+
+  if (form && input && error) {
+    /**
+     * Se distingue ERROR de AVISO a propósito.
+     *
+     * "El correo no es válido" es un error del usuario: marca el campo con
+     * aria-invalid y lo pinta en rojo, porque hay algo que corregir.
+     * "El registro no está conectado" NO lo es: el correo está perfecto y
+     * el problema es nuestro. Marcarlo como inválido le diría al lector de
+     * pantalla que el campo está mal cuando no lo está.
+     */
+    const show = (msg: string, kind: 'error' | 'aviso' = 'error') => {
+      error.textContent = msg;
+      error.hidden = false;
+      error.dataset.kind = kind;
+      if (kind === 'error') input.setAttribute('aria-invalid', 'true');
+      else input.removeAttribute('aria-invalid');
+    };
+
+    const clear = () => {
+      error.hidden = true;
+      error.textContent = '';
+      delete error.dataset.kind;
+      input.removeAttribute('aria-invalid');
+    };
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+
+      const value = input.value.trim();
+
+      if (!value) {
+        show('Escribe tu correo para continuar.');
+        input.focus();
+        return;
+      }
+
+      // validity.typeMismatch usa el propio validador del navegador, que
+      // conoce mejor los correos válidos que cualquier expresión regular
+      // que escribamos aquí.
+      if (input.validity.typeMismatch) {
+        show('Ese correo no parece válido. Revísalo.');
+        input.focus();
+        return;
+      }
+
+      clear();
+
+      // TODO(backend): enviar al endpoint de alta. Hasta entonces no se
+      // finge un registro correcto — sería mentirle al usuario.
+      show(
+        'El registro todavía no está conectado. Vuelve en unos días.',
+        'aviso',
+      );
+    });
+
+    input.addEventListener('input', () => {
+      if (!error.hidden) clear();
+    });
+  }
+</script>

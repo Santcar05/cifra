@@ -1,0 +1,247 @@
+---
+/**
+ * Las anclas del nav apuntan a secciones que solo existen en la PORTADA.
+ * Como este componente se monta en todas las páginas, en /empezar y en las
+ * legales esas anclas no llevaban a ningún sitio: al pulsarlas no pasaba
+ * nada, que es peor que un 404 porque parece que la web está rota.
+ *
+ * Fuera de la portada se prefijan con `/` para que naveguen a la portada y
+ * de ahí al ancla. En la portada se dejan relativas para conservar el
+ * desplazamiento suave en la misma página.
+ */
+const enPortada = Astro.url.pathname === '/';
+const a = (ancla: string) => (enPortada ? ancla : `/${ancla}`);
+
+const links = [
+    { href: a('#como-funciona'), label: 'Cómo funciona' },
+    { href: a('#empresas'),      label: 'Para empresas' },
+    { href: a('#contadores'),    label: 'Contadores' },
+    // «Precios» se quitó: no hay modelo definido, y los términos dicen que
+    // hoy no se cobra nada. Un enlace que promete precios y no los tiene
+    // rompe la confianza justo donde el visitante está decidiendo.
+];
+---
+
+<div id="scroll-sentinel" aria-hidden="true"></div>
+
+<header class="site-header">
+  <div class="site-header__inner">
+    <a class="logo" href="/">CIFRA</a>
+
+    <nav class="site-nav" aria-label="Principal">
+      {links.map((l) => (
+        <a class="nav-link" href={l.href}>{l.label}</a>
+      ))}
+    </nav>
+
+    <a class="btn btn--primary btn--sm site-header__cta" href="/empezar">
+      Empieza gratis
+    </a>
+
+    <button
+      type="button"
+      class="nav-toggle"
+      aria-expanded="false"
+      aria-controls="nav-sheet"
+    >
+      Menú
+    </button>
+  </div>
+</header>
+
+<dialog id="nav-sheet" class="nav-sheet" aria-label="Navegación principal">
+  <button type="button" class="nav-sheet__close" autofocus>Cerrar</button>
+  <nav class="nav-sheet__nav">
+    {links.map((l) => <a href={l.href}>{l.label}</a>)}
+  </nav>
+  <a class="btn btn--primary" href="/empezar">Empieza gratis</a>
+</dialog>
+
+<style>
+  #scroll-sentinel {
+    position: absolute;
+    top: 0;
+    width: 1px;
+    height: 1px;
+    pointer-events: none;
+  }
+
+  .site-header {
+    position: fixed;
+    inset-block-start: 0;
+    inset-inline: 0;
+    z-index: var(--z-sticky);
+    height: 64px;
+    background: var(--brand-900);
+    border-block-end: 1px solid transparent;
+    transition:
+      background-color var(--dur-hover) var(--ease-out),
+      border-color     var(--dur-hover) var(--ease-out);
+  }
+
+  .site-header.is-scrolled {
+    background: color-mix(in srgb, var(--brand-900) 82%, transparent);
+    backdrop-filter: blur(12px) saturate(140%);
+    border-block-end-color: var(--on-ink-line);
+  }
+
+  .site-header__inner {
+    max-width: var(--container);
+    margin-inline: auto;
+    padding-inline: var(--gutter);
+    height: 100%;
+    display: flex;
+    align-items: center;
+    gap: 32px;
+  }
+
+  .logo {
+    font-size: 18px;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--on-ink-primary);
+    text-decoration: none;
+    margin-inline-end: auto;
+  }
+
+  .site-nav {
+    display: flex;
+    gap: 28px;
+  }
+
+  .nav-link {
+    font-size: 15px;
+    color: var(--on-ink-secondary);
+    text-decoration: underline;
+    text-decoration-color: transparent;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.3em;
+    transition:
+      color var(--dur-hover) var(--ease-out),
+      text-decoration-color var(--dur-hover) var(--ease-out);
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .nav-link:hover {
+      color: var(--on-ink-primary);
+      text-decoration-color: var(--olive-400);
+    }
+  }
+
+  .nav-toggle {
+    display: none;
+    background: none;
+    border: 1px solid var(--on-ink-border);
+    border-radius: var(--radius);
+    color: var(--on-ink-primary);
+    padding: 8px 14px;
+    font-size: 14px;
+    cursor: pointer;
+  }
+
+  @media (width < 60rem) {
+    .site-nav,
+    .site-header__cta { display: none; }
+    .nav-toggle       { display: block; }
+  }
+
+  /* --- Hoja móvil --- */
+  .nav-sheet {
+    margin: 0;
+    padding: var(--gutter);
+    border: 0;
+    width: 100%;
+    height: 100%;
+    max-width: 100%;
+    max-height: 100%;
+    background: var(--brand-900);
+    color: var(--on-ink-primary);
+    opacity: 1;
+    translate: 0 0;
+    transition:
+      opacity   var(--dur-enter) var(--ease-drawer),
+      translate var(--dur-enter) var(--ease-drawer),
+      overlay   var(--dur-enter) allow-discrete,
+      display   var(--dur-enter) allow-discrete;
+  }
+
+  .nav-sheet:not([open]) {
+    opacity: 0;
+    translate: 0 -1rem;
+    transition-duration: var(--dur-exit);
+  }
+
+  @starting-style {
+    .nav-sheet[open] {
+      opacity: 0;
+      translate: 0 -1rem;
+    }
+  }
+
+  .nav-sheet::backdrop {
+    background: rgb(10 26 47 / 0.6);
+    backdrop-filter: blur(4px);
+  }
+
+  .nav-sheet__close {
+    background: none;
+    border: 1px solid var(--on-ink-border);
+    border-radius: var(--radius);
+    color: var(--on-ink-primary);
+    padding: 8px 14px;
+    font-size: 14px;
+    cursor: pointer;
+    margin-block-end: 48px;
+  }
+
+  .nav-sheet__nav {
+    display: grid;
+    gap: 24px;
+    margin-block-end: 48px;
+  }
+
+  .nav-sheet__nav a {
+    font-size: 28px;
+    color: var(--on-ink-primary);
+    text-decoration: none;
+  }
+</style>
+
+<script>
+  const sentinel = document.querySelector('#scroll-sentinel');
+  const header = document.querySelector('.site-header');
+
+  if (sentinel && header) {
+    new IntersectionObserver(
+      ([entry]) => header.classList.toggle('is-scrolled', !entry.isIntersecting),
+      { rootMargin: '-8px 0px 0px 0px' }
+    ).observe(sentinel);
+  }
+
+  const toggle = document.querySelector<HTMLButtonElement>('.nav-toggle');
+  const sheet = document.querySelector<HTMLDialogElement>('#nav-sheet');
+  const main = document.querySelector('main');
+
+  if (toggle && sheet) {
+    toggle.addEventListener('click', () => {
+      sheet.showModal();
+      toggle.setAttribute('aria-expanded', 'true');
+      main?.setAttribute('inert', '');
+    });
+
+    sheet.addEventListener('close', () => {
+      toggle.setAttribute('aria-expanded', 'false');
+      main?.removeAttribute('inert');
+      toggle.focus();
+    });
+
+    sheet
+      .querySelector('.nav-sheet__close')
+      ?.addEventListener('click', () => sheet.close());
+
+    sheet.querySelectorAll('a[href^="#"]').forEach((a) =>
+      a.addEventListener('click', () => sheet.close())
+    );
+  }
+</script>

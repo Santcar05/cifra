@@ -1,0 +1,260 @@
+---
+/**
+ * LegalLayout — estructura común de los tres documentos legales.
+ *
+ * Los tres comparten: cabecera con título y fecha de vigencia, índice
+ * navegable, cuerpo en prosa, y un pie que enlaza a los otros dos. Ese
+ * último detalle importa más de lo que parece: un lector que llega a uno
+ * de los tres debe entender inmediatamente que hay tres y por qué.
+ */
+import Layout from '@components/layout/Layout.astro';
+import Header from '@components/layout/Header.astro';
+import Footer from '@components/layout/Footer.astro';
+
+interface Seccion {
+  id: string;
+  titulo: string;
+}
+
+interface Props {
+  /** Título del documento, tal como aparece en la página. */
+  titulo: string;
+  /** Una línea que dice qué ES y qué NO es este documento. */
+  sumario: string;
+  title: string;
+  description: string;
+  /** Ruta actual, para no enlazarse a sí misma en el pie. */
+  ruta: '/legal/terminos' | '/legal/privacidad' | '/legal/datos';
+  secciones: Seccion[];
+}
+
+const { titulo, sumario, title, description, ruta, secciones } = Astro.props;
+
+const documentos = [
+  {
+    ruta: '/legal/terminos',
+    nombre: 'Términos y Condiciones',
+    que: 'Las reglas del servicio: qué hace CIFRA, qué no hace y qué puedes esperar.',
+  },
+  {
+    ruta: '/legal/privacidad',
+    nombre: 'Política de Tratamiento de la Información',
+    que: 'El documento completo sobre tus datos personales, como exige la Ley 1581 de 2012.',
+  },
+  {
+    ruta: '/legal/datos',
+    nombre: 'Aviso de Privacidad',
+    que: 'La versión corta, y el procedimiento concreto para ejercer tus derechos.',
+  },
+];
+
+const otros = documentos.filter((d) => d.ruta !== ruta);
+---
+
+<Layout title={title} description={description}>
+  <Header />
+
+  <main id="contenido" class="page">
+    <article class="full band section legal">
+      <div class="inner legal__grid">
+        <header class="legal__head">
+          <h1 class="legal__title">{titulo}</h1>
+          <p class="legal__sumario">{sumario}</p>
+          <hr class="rule-olive" />
+        </header>
+
+        <nav class="legal__toc" aria-labelledby="toc-h">
+          <h2 id="toc-h" class="legal__toc-title">Contenido</h2>
+          <ol class="legal__toc-list">
+            {secciones.map((s, i) => (
+              <li>
+                <span class="legal__toc-n">{String(i + 1).padStart(2, '0')}</span>
+                <a href={`#${s.id}`}>{s.titulo}</a>
+              </li>
+            ))}
+          </ol>
+        </nav>
+
+        <div class="prose legal__body">
+          <slot />
+        </div>
+
+        <aside class="legal__otros" aria-labelledby="otros-h">
+          <h2 id="otros-h" class="legal__otros-title">Los otros dos documentos</h2>
+          <ul class="legal__otros-list">
+            {otros.map((d) => (
+              <li>
+                <a href={d.ruta}>{d.nombre}</a>
+                <span>{d.que}</span>
+              </li>
+            ))}
+          </ul>
+        </aside>
+      </div>
+    </article>
+  </main>
+
+  <Footer />
+</Layout>
+
+<style>
+  /* El índice va pegado arriba en pantallas anchas: en un documento de
+     veinte cláusulas, perder la referencia de dónde estás es el problema
+     número uno de lectura. */
+  .legal__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 15rem);
+    grid-template-areas:
+      'head  toc'
+      'body  toc'
+      'otros toc';
+    align-items: start;
+    column-gap: clamp(32px, 5vw, 80px);
+  }
+
+  /* Sin esto la columna no baja del ancho mínimo de su contenido —un
+     titular de 30px con palabras largas— y a 320px la página entera se
+     desborda aunque el contenedor tenga padding. `1fr` es
+     `minmax(auto, 1fr)`, y ese `auto` es el que hay que anular. */
+  .legal__grid > * {
+    min-width: 0;
+  }
+
+  .legal__head {
+    grid-area: head;
+    max-width: 30ch;
+  }
+
+  .legal__title {
+    font-size: clamp(30px, 4vw, 46px);
+    line-height: 1.08;
+    letter-spacing: -0.03em;
+    font-weight: 500;
+  }
+
+  .legal__sumario {
+    margin-block-start: 18px;
+    font-size: 17px;
+    line-height: 1.65;
+    color: var(--text-secondary);
+    max-width: 52ch;
+  }
+
+  .legal__body {
+    grid-area: body;
+    margin-block-start: 8px;
+  }
+
+  .legal__toc {
+    grid-area: toc;
+    position: sticky;
+    inset-block-start: 96px;
+    padding-inline-start: clamp(20px, 2vw, 28px);
+    border-inline-start: 1px solid var(--line);
+  }
+
+  .legal__toc-title,
+  .legal__otros-title {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-secondary);
+    margin-block-end: 14px;
+  }
+
+  .legal__toc-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 9px;
+  }
+
+  .legal__toc-list li {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 10px;
+    font-size: 14px;
+    line-height: 1.4;
+  }
+
+  .legal__toc-n {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-variant-numeric: tabular-nums;
+    color: var(--text-muted);
+    padding-block-start: 3px;
+  }
+
+  .legal__toc-list a {
+    color: var(--text-secondary);
+    text-decoration: underline;
+    text-decoration-color: transparent;
+    text-underline-offset: 0.25em;
+    transition:
+      color var(--dur-hover) var(--ease-out),
+      text-decoration-color var(--dur-hover) var(--ease-out);
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .legal__toc-list a:hover {
+      color: var(--ink);
+      text-decoration-color: var(--olive-700);
+    }
+  }
+
+  .legal__otros {
+    grid-area: otros;
+    margin-block-start: clamp(56px, 6vw, 88px);
+    padding-block-start: 28px;
+    border-block-start: 1px solid var(--line);
+    max-width: 68ch;
+  }
+
+  .legal__otros-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 16px;
+  }
+
+  .legal__otros-list li {
+    display: grid;
+    gap: 3px;
+    font-size: 14px;
+  }
+
+  .legal__otros-list a {
+    color: var(--ink);
+    font-weight: 500;
+    text-decoration: underline;
+    text-decoration-color: var(--olive-700);
+    text-underline-offset: 0.25em;
+  }
+
+  .legal__otros-list span {
+    color: var(--text-secondary);
+    line-height: 1.55;
+  }
+
+  @media (width < 64rem) {
+    .legal__grid {
+      grid-template-columns: minmax(0, 1fr);
+      grid-template-areas:
+        'head'
+        'toc'
+        'body'
+        'otros';
+      row-gap: 0;
+    }
+
+    .legal__toc {
+      position: static;
+      margin-block: 32px 40px;
+      padding-inline-start: 0;
+      padding-block: 22px;
+      border-inline-start: 0;
+      border-block: 1px solid var(--line);
+    }
+  }
+</style>

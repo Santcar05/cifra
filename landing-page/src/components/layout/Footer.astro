@@ -1,0 +1,155 @@
+---
+/**
+ * Igual que en el nav: las anclas apuntan a secciones que solo existen en
+ * la portada, y el pie se monta en todas las páginas. Fuera de la portada
+ * hay que prefijarlas con `/` o no llevan a ninguna parte.
+ */
+const enPortada = Astro.url.pathname === '/';
+const a = (ancla: string) => (enPortada ? ancla : `/${ancla}`);
+
+const columns = [
+  {
+    title: 'Producto',
+    links: [
+      { label: 'Cómo funciona', href: a('#como-funciona') },
+      { label: 'La bandeja del agente', href: a('#agente') },
+      { label: 'Empieza gratis', href: '/empezar' },
+      // Se quitaron «Precios» (no hay modelo definido) y «Estado del
+      // servicio» (no hay servicio que reportar todavía). Los dos
+      // enlazaban a destinos que no existen.
+    ],
+  },
+  {
+    title: 'Para quién',
+    links: [
+      // Antes los tres apuntaban a #roles. Ahora cada uno va a su tarjeta:
+      // tres enlaces distintos al mismo destino es un descuido.
+      { label: 'Independientes', href: a('#independientes') },
+      { label: 'Empresas', href: a('#empresas') },
+      { label: 'Contadores', href: a('#contadores') },
+    ],
+  },
+  {
+    title: 'Legal',
+    links: [
+      { label: 'Términos', href: '/legal/terminos' },
+      { label: 'Privacidad', href: '/legal/privacidad' },
+      { label: 'Tratamiento de datos', href: '/legal/datos' },
+    ],
+  },
+];
+
+const year = new Date().getFullYear();
+---
+
+<footer class="full band footer">
+  <div class="inner">
+    <div class="footer__grid">
+      <div class="footer__brand">
+        <span class="footer__logo">CIFRA</span>
+      </div>
+
+      {columns.map((c) => (
+        <nav class="footer__col" aria-label={c.title}>
+          <h2 class="footer__col-title">{c.title}</h2>
+          <ul class="footer__list">
+            {c.links.map((l) => (
+              <li><a class="footer__link" href={l.href}>{l.label}</a></li>
+            ))}
+          </ul>
+        </nav>
+      ))}
+    </div>
+
+    <p class="footer__legal">
+      CIFRA prepara, calcula y documenta tu información tributaria. No
+      sustituye la asesoría de un contador, que es quien firma tu declaración.
+    </p>
+
+    <p class="footer__copy">© {year} CIFRA — Bogotá, Colombia</p>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    border-block-start: 1px solid var(--line);
+    padding-block: clamp(56px, 7vw, 88px) 40px;
+  }
+
+  .footer__grid {
+    display: grid;
+    grid-template-columns: 1.4fr repeat(3, 1fr);
+    gap: clamp(28px, 4vw, 56px);
+  }
+
+  .footer__logo {
+    font-size: 18px;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .footer__col-title {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+    margin-block-end: 16px;
+  }
+
+  .footer__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 10px;
+  }
+
+  .footer__link {
+    font-size: 14px;
+    color: var(--ink);
+    text-decoration: underline;
+    text-decoration-color: transparent;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.3em;
+    transition: text-decoration-color var(--dur-hover) var(--ease-out);
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .footer__link:hover {
+      text-decoration-color: var(--olive-700);
+    }
+  }
+
+  .footer__legal {
+    max-width: 62ch;
+    margin-block-start: clamp(48px, 6vw, 72px);
+    padding-block-start: 28px;
+    border-block-start: 1px solid var(--line);
+    font-size: 13px;
+    line-height: 1.6;
+    color: var(--text-secondary);
+  }
+
+  .footer__copy {
+    margin-block-start: 16px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--text-secondary);
+  }
+
+  @media (width < 56rem) {
+    .footer__grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  @media (width < 34rem) {
+    .footer__grid {
+      grid-template-columns: 1fr;
+      gap: 32px;
+    }
+  }
+</style>

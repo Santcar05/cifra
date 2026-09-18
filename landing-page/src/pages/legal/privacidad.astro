@@ -1,0 +1,440 @@
+---
+/**
+ * ⚠️ DOCUMENTO NO REVISADO POR ABOGADO ⚠️
+ *
+ * Redactado siguiendo el contenido mínimo del Decreto 1074 de 2015
+ * art. 2.2.2.25.3.1, pero NO lo ha revisado un abogado colombiano.
+ *
+ * NO PUBLICAR mientras queden bloques <span class="pendiente"> sin
+ * rellenar: son datos que la norma exige y que hoy no existen.
+ *
+ * REGLA DE REDACCIÓN: describe solo lo que CIFRA hace HOY. Lo que aún no
+ * existe va en condicional y marcado. Declarar finalidades o plazos que no
+ * se cumplen es exigible ante la SIC por vulnerar los principios de
+ * veracidad y transparencia (Ley 1581 de 2012, art. 4 lits. d y e).
+ */
+import LegalLayout from '@/layouts/LegalLayout.astro';
+
+const secciones = [
+  { id: 'responsable', titulo: 'Quién responde por tus datos' },
+  { id: 'alcance', titulo: 'Qué cubre esta política' },
+  { id: 'estado', titulo: 'Estado actual del servicio' },
+  { id: 'datos', titulo: 'Qué datos tratamos' },
+  { id: 'naturaleza', titulo: 'Naturaleza de los datos financieros' },
+  { id: 'finalidades', titulo: 'Para qué los usamos' },
+  { id: 'autorizacion', titulo: 'Tu autorización y cómo revocarla' },
+  { id: 'derechos', titulo: 'Tus derechos' },
+  { id: 'procedimiento', titulo: 'Cómo ejercerlos y en qué plazos' },
+  { id: 'terceros', titulo: 'Quién más accede a tus datos' },
+  { id: 'internacional', titulo: 'Transferencia internacional' },
+  { id: 'ia', titulo: 'Inteligencia artificial' },
+  { id: 'seguridad', titulo: 'Seguridad' },
+  { id: 'conservacion', titulo: 'Cuánto tiempo los guardamos' },
+  { id: 'menores', titulo: 'Menores de edad' },
+  { id: 'rnbd', titulo: 'Registro Nacional de Bases de Datos' },
+  { id: 'cambios', titulo: 'Cambios en esta política' },
+  { id: 'vigencia', titulo: 'Vigencia' },
+];
+---
+
+<LegalLayout
+  title="Política de Tratamiento de la Información — CIFRA"
+  description="Cómo trata CIFRA los datos personales de sus usuarios: qué recogemos, para qué, quién accede, cuánto tiempo los guardamos y cómo ejercer tus derechos ante la Ley 1581 de 2012."
+  titulo="Política de Tratamiento de la Información"
+  sumario="Este es el documento completo sobre tus datos personales. Si buscas la versión corta o quieres presentar una solicitud, ve al Aviso de Privacidad."
+  ruta="/legal/privacidad"
+  secciones={secciones}
+>
+  <h2 id="responsable">1. Quién responde por tus datos</h2>
+
+  <p>
+    El responsable del tratamiento de tus datos personales es:
+  </p>
+
+  <div class="bloque">
+    <p>
+      <strong>Responsable:</strong> <span class="pendiente">[NOMBRE COMPLETO]</span><br />
+      <strong>Dirección de notificaciones:</strong> <span class="pendiente">[DIRECCIÓN]</span><br />
+      <strong>Correo electrónico:</strong> <span class="pendiente">[CORREO]</span><br />
+      <strong>Teléfono:</strong> <span class="pendiente">[TELÉFONO]</span><br />
+      <strong>Atiende consultas y reclamos:</strong> la misma persona y el mismo correo.
+    </p>
+  </div>
+
+  <p>
+    CIFRA opera actualmente como persona natural. La Ley 1581 de 2012 permite
+    expresamente que el responsable del tratamiento sea una persona natural o
+    jurídica. <span class="norma">(Ley 1581 de 2012, art. 3 lit. e)</span>
+  </p>
+
+  <h2 id="alcance">2. Qué cubre esta política</h2>
+
+  <p>
+    Cubre el tratamiento de datos personales que CIFRA realiza a través de su
+    sitio web y, cuando exista, de su aplicación. Se aplica a toda persona
+    natural cuyos datos tratemos: quien se registra, quien nos escribe y
+    quien usa el servicio.
+  </p>
+
+  <p>
+    No cubre el tratamiento que hagan terceros con sus propias políticas —
+    tu banco, tu pasarela de pagos o la DIAN— aunque llegues a ellos desde
+    CIFRA.
+  </p>
+
+  <h2 id="estado">3. Estado actual del servicio</h2>
+
+  <p>
+    <strong>Decimos esto por transparencia, no por formalidad.</strong> A la
+    fecha de esta política, CIFRA está en desarrollo y todavía no presta
+    servicio:
+  </p>
+
+  <ul>
+    <li>No hay cuentas de usuario activas.</li>
+    <li>
+      El formulario de <a href="/empezar">/empezar</a> no está conectado a
+      ningún sistema: <strong>no almacena el correo que escribas en él</strong>.
+    </li>
+    <li>No hay conexión con ningún banco ni pasarela de pagos.</li>
+    <li>No se emite ninguna factura electrónica.</li>
+    <li>No se cobra nada a nadie.</li>
+  </ul>
+
+  <p>
+    Las secciones que siguen describen cómo trataremos los datos
+    <strong>cuando el servicio funcione</strong>. Están redactadas en
+    condicional donde la función todavía no existe. Actualizaremos esta
+    política y la fecha de vigencia antes de empezar a tratar datos de verdad.
+  </p>
+
+  <h2 id="datos">4. Qué datos tratamos</h2>
+
+  <h3>4.1 Datos de identificación y contacto</h3>
+  <ul>
+    <li>Nombre y apellidos.</li>
+    <li>Correo electrónico.</li>
+    <li>
+      Número de identificación tributaria, cuando sea necesario para emitir
+      facturas electrónicas a tu nombre.
+    </li>
+  </ul>
+
+  <h3>4.2 Datos financieros y transaccionales</h3>
+  <p>Cuando conectes una cuenta, trataríamos:</p>
+  <ul>
+    <li>
+      Movimientos de tus cuentas bancarias y pasarelas: fecha, monto,
+      descripción y contraparte.
+    </li>
+    <li>Saldos.</li>
+    <li>
+      Datos de las facturas que emitas: número, monto, CUFE, y datos de
+      identificación de tus clientes.
+    </li>
+  </ul>
+
+  <p>
+    <strong>No tratamos ni almacenamos</strong> tus credenciales bancarias,
+    tu contraseña del banco ni datos completos de tarjetas.
+  </p>
+
+  <h3>4.3 Datos de uso</h3>
+  <ul>
+    <li>
+      Registros técnicos de acceso al servicio: fecha, hora y tipo de acción.
+    </li>
+    <li>
+      Registro de qué propuestas del asistente aprobaste o rechazaste, y
+      cuándo. Este registro es lo que hace que cada decisión quede auditada.
+    </li>
+  </ul>
+
+  <h2 id="naturaleza">5. Naturaleza de los datos financieros</h2>
+
+  <p>
+    Los datos financieros que trataríamos son <strong>datos semiprivados</strong>.
+    No son datos sensibles: la Ley 1581 de 2012 enumera los datos sensibles de
+    forma taxativa —origen racial o étnico, orientación política, convicciones
+    religiosas o filosóficas, pertenencia a sindicatos, datos de salud, vida
+    sexual y datos biométricos— y los financieros no están en esa lista.
+    <span class="norma">(Ley 1581 de 2012, art. 5)</span>
+  </p>
+
+  <p>
+    Esta política se rige por la <strong>Ley 1581 de 2012</strong>, no por la
+    Ley 1266 de 2008. La Ley 1266 regula el dato financiero destinado a
+    calcular riesgo crediticio en bancos de datos tipo central de riesgo, y
+    CIFRA no opera ninguno: leemos los movimientos de tu propia cuenta para
+    conciliarlos con tus facturas, no para evaluar tu solvencia ni para
+    reportarte a ninguna parte.
+  </p>
+
+  <h2 id="finalidades">6. Para qué los usamos</h2>
+
+  <p>
+    Estas son las finalidades, y son las únicas. No usaremos tus datos para
+    fines distintos sin pedirte una autorización nueva.
+  </p>
+
+  <ol>
+    <li>Crear y mantener tu cuenta, y permitirte acceder al servicio.</li>
+    <li>
+      Leer los movimientos de las cuentas que conectes para identificar a qué
+      factura corresponde cada pago recibido.
+    </li>
+    <li>
+      Calcular la porción de tus ingresos que corresponde a obligaciones
+      tributarias y mostrártela como no disponible.
+    </li>
+    <li>
+      Generar y transmitir facturas electrónicas a la DIAN a tu nombre y por
+      tu instrucción.
+    </li>
+    <li>
+      Conservar el registro de las propuestas del asistente y de tus
+      decisiones sobre ellas, para que puedas auditarlas y revertirlas.
+    </li>
+    <li>Responder a tus consultas, reclamos y solicitudes de soporte.</li>
+    <li>
+      Cumplir obligaciones legales, contables y tributarias que nos apliquen.
+    </li>
+    <li>
+      Enviarte comunicaciones sobre el servicio que estés usando. Las
+      comunicaciones comerciales requieren tu autorización aparte y puedes
+      retirarla en cualquier momento.
+    </li>
+  </ol>
+
+  <h2 id="autorizacion">7. Tu autorización y cómo revocarla</h2>
+
+  <p>
+    Trataremos tus datos solo con tu autorización <strong>previa, expresa e
+    informada</strong>, que te pediremos a más tardar en el momento de
+    recoger los datos. Esa autorización se dará marcando una casilla que
+    <strong>nunca estará marcada de antemano</strong>, y guardaremos prueba
+    de que la diste.
+    <span class="norma">(Ley 1581 de 2012, art. 9; Decreto 1377 de 2013, arts. 5, 7 y 12)</span>
+  </p>
+
+  <p>
+    <strong>Conectar una cuenta bancaria requiere una autorización propia</strong>,
+    separada de la del registro. Ese permiso será siempre de solo lectura:
+    permite ver movimientos, nunca moverlos.
+  </p>
+
+  <p>
+    Puedes revocar cualquiera de esas autorizaciones cuando quieras, desde el
+    propio servicio o escribiéndonos, <strong>sin tener que explicar por
+    qué</strong>. Desconectar una cuenta corta el acceso de forma inmediata.
+  </p>
+
+  <h2 id="derechos">8. Tus derechos</h2>
+
+  <p>Como titular de tus datos personales tienes derecho a:</p>
+
+  <ul>
+    <li>Conocer qué datos tuyos tratamos, gratuitamente.</li>
+    <li>Actualizarlos y rectificarlos cuando estén incompletos o erróneos.</li>
+    <li>
+      Solicitar su supresión cuando el tratamiento no respete la ley, salvo
+      que exista un deber legal de conservarlos.
+    </li>
+    <li>Revocar la autorización que nos diste.</li>
+    <li>Solicitar prueba de la autorización que otorgaste.</li>
+    <li>Ser informado del uso que hemos dado a tus datos.</li>
+    <li>
+      Presentar quejas ante la <strong>Superintendencia de Industria y
+      Comercio</strong> por infracciones a la ley de protección de datos.
+    </li>
+  </ul>
+
+  <h2 id="procedimiento">9. Cómo ejercerlos y en qué plazos</h2>
+
+  <p>
+    Escribe a <span class="pendiente">[CORREO]</span> indicando tu nombre, el
+    derecho que quieres ejercer y los datos a los que te refieres. El
+    procedimiento detallado está en el
+    <a href="/legal/datos">Aviso de Privacidad</a>.
+  </p>
+
+  <p>Los plazos son los que fija la ley y los cumplimos:</p>
+
+  <div class="tabla">
+    <table>
+      <thead>
+        <tr>
+          <th>Tipo de solicitud</th>
+          <th>Plazo</th>
+          <th>Prórroga máxima</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Consulta</strong> — saber qué datos tuyos tenemos</td>
+          <td>10 días hábiles</td>
+          <td>5 días hábiles</td>
+        </tr>
+        <tr>
+          <td><strong>Reclamo</strong> — corregir, actualizar o suprimir</td>
+          <td>15 días hábiles</td>
+          <td>8 días hábiles</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p class="norma">
+    Ley 1581 de 2012, arts. 14 y 15. Si necesitamos una prórroga te
+    informaremos el motivo y la fecha en que responderemos.
+  </p>
+
+  <h2 id="terceros">10. Quién más accede a tus datos</h2>
+
+  <p>
+    <strong>No vendemos tus datos a nadie</strong>, ni los cedemos con fines
+    comerciales o publicitarios.
+  </p>
+
+  <p>
+    Para operar necesitaremos apoyarnos en proveedores que actúan como
+    encargados del tratamiento, siguiendo nuestras instrucciones:
+  </p>
+
+  <ul>
+    <li>
+      <strong>Alojamiento e infraestructura:</strong> el servicio se alojaría
+      en <span class="pendiente">[PROVEEDOR DE ALOJAMIENTO]</span>, región
+      <span class="pendiente">[REGIÓN]</span>.
+    </li>
+    <li>
+      <strong>Conexión con entidades financieras:</strong> todavía no está
+      decidido si la conexión será directa con cada entidad o a través de un
+      agregador. <strong>Si fuera mediante un agregador, ese tercero
+      accedería a tus datos bancarios</strong>, y lo identificaremos aquí por
+      su nombre antes de que ocurra:
+      <span class="pendiente">[PROVEEDOR DE AGREGACIÓN]</span>.
+    </li>
+    <li>
+      <strong>DIAN:</strong> los datos de las facturas que emitas se
+      transmiten a la autoridad tributaria, porque así funciona la
+      facturación electrónica.
+    </li>
+  </ul>
+
+  <p>
+    También entregaremos datos cuando nos lo exija una autoridad competente
+    mediante orden válida.
+  </p>
+
+  <h2 id="internacional">11. Transferencia internacional</h2>
+
+  <p>
+    Si el proveedor de alojamiento almacena datos fuera de Colombia, habría
+    transferencia internacional. Cuando esté decidida la región, la
+    indicaremos en la sección anterior y adoptaremos las garantías que exige
+    la normativa colombiana.
+  </p>
+
+  <h2 id="ia">12. Inteligencia artificial</h2>
+
+  <p>
+    CIFRA usa modelos de inteligencia artificial para leer movimientos y
+    proponer a qué factura corresponde cada pago. Sobre eso:
+  </p>
+
+  <ul>
+    <li>
+      <strong>No entrenamos modelos con tus datos.</strong> Tu información
+      financiera se usa para procesar tu caso, no para mejorar modelos que
+      luego sirvan a otros.
+    </li>
+    <li>
+      <strong>El asistente propone; tú decides.</strong> Ninguna propuesta se
+      aplica sin tu aprobación.
+    </li>
+    <li>
+      <strong>El asistente no puede mover dinero en ningún caso.</strong> No
+      es una restricción de política: el permiso que pedimos al banco es de
+      solo lectura y no habilita movimientos.
+    </li>
+    <li>
+      A medida que apruebes propuestas, el asistente puede pasar a ejecutar
+      directamente ciertas tareas sin pedirte confirmación previa —siempre
+      tareas de clasificación y cálculo, nunca movimientos de dinero, que
+      son técnicamente imposibles—. Puedes volver al nivel anterior cuando
+      quieras, y toda decisión queda registrada y es reversible.
+    </li>
+  </ul>
+
+  <h2 id="seguridad">13. Seguridad</h2>
+
+  <p>
+    Adoptaremos medidas técnicas y administrativas razonables para proteger
+    tus datos: cifrado en tránsito y en reposo, control de acceso por rol, y
+    registro de accesos.
+  </p>
+
+  <p>
+    Ninguna medida elimina el riesgo por completo, y decirte lo contrario
+    sería faltar a la verdad. Si ocurre un incidente que afecte tus datos,
+    te lo comunicaremos y lo reportaremos a la autoridad cuando corresponda.
+  </p>
+
+  <h2 id="conservacion">14. Cuánto tiempo los guardamos</h2>
+
+  <ul>
+    <li>
+      Mientras tu cuenta esté activa, y después el tiempo que exijan las
+      obligaciones legales, contables y tributarias que nos apliquen.
+    </li>
+    <li>
+      Si cierras tu cuenta, suprimiremos o anonimizaremos los datos que no
+      tengamos el deber legal de conservar.
+    </li>
+    <li>
+      Los documentos con efectos tributarios, como las facturas, se conservan
+      por el plazo que fija la normativa fiscal, aunque cierres la cuenta.
+    </li>
+  </ul>
+
+  <h2 id="menores">15. Menores de edad</h2>
+
+  <p>
+    CIFRA está dirigida a personas mayores de edad que ejercen una actividad
+    económica. No recogemos datos de menores de manera consciente. Si detectamos
+    que lo hemos hecho, los suprimiremos.
+  </p>
+
+  <h2 id="rnbd">16. Registro Nacional de Bases de Datos</h2>
+
+  <p>
+    El registro ante el RNBD de la Superintendencia de Industria y Comercio
+    obliga a sociedades y entidades sin ánimo de lucro con activos totales
+    superiores a 100.000 UVT, y a personas jurídicas de naturaleza pública.
+    <strong>CIFRA no está hoy en ninguno de esos supuestos</strong>, por lo que
+    no está obligada a inscribirse. Lo haremos si la situación cambia.
+    <span class="norma">(Ley 1581 de 2012, art. 25; Decreto 1074 de 2015; Decreto 090 de 2018)</span>
+  </p>
+
+  <h2 id="cambios">17. Cambios en esta política</h2>
+
+  <p>
+    Si cambiamos esta política actualizaremos la fecha de vigencia. Cuando el
+    cambio afecte a las finalidades o implique tratar datos de forma distinta
+    a la autorizada, te lo comunicaremos y te pediremos autorización nueva
+    antes de aplicarlo.
+  </p>
+
+  <h2 id="vigencia">18. Vigencia</h2>
+
+  <p>
+    Esta política rige desde <span class="pendiente">[FECHA DE VIGENCIA]</span>.
+  </p>
+
+  <p>
+    Las bases de datos estarán vigentes mientras sea necesario para cumplir
+    las finalidades del apartado 6 y los plazos legales de conservación del
+    apartado 14.
+  </p>
+</LegalLayout>

@@ -1,0 +1,89 @@
+---
+import '@styles/global.css';
+
+interface Props {
+    title: string;
+    description: string;
+    /* Ruta de la imagen OG, relativa a la raíz del sitio. */
+    ogImage?: string;
+}
+
+const {
+    title,
+    description,
+    ogImage = '/og-cifra.png',
+} = Astro.props;
+
+// Astro.site viene de astro.config.mjs. new URL() convierte la ruta
+// relativa en absoluta, que es lo que exigen las etiquetas Open Graph:
+// las redes sociales no resuelven rutas relativas.
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const ogAbsolute = new URL(ogImage, Astro.site);
+---
+
+<!doctype html>
+<html lang="es-CO">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>{title}</title>
+        <meta name="description" content={description} />
+        <link rel="canonical" href={canonical} />
+         <!-- Le dice al navegador que la página soporta ambos temas, para que
+         pinte el fondo correcto ANTES de aplicar el CSS. Sin esto hay
+         un destello blanco al cargar en modo oscuro. -->
+        <meta name="color-scheme" content="light dark" />
+
+        <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+
+        <!-- Fuentes. Ver §8 para por qué son dos preconnect
+         y por qué solo el segundo lleva crossorigin. -->
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            rel="stylesheet"
+            href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500&family=Geist+Mono:wght@400;500&display=swap"
+        />
+
+        <!-- Open Graph -->
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content={title} />
+        <meta property="og:description" content={description} />
+        <meta property="og:url" content={canonical} />
+        <meta property="og:image" content={ogAbsolute} />
+        <meta property="og:locale" content="es_CO" />
+        <meta name="twitter:card" content="summary_large_image" />
+    </head>
+
+  <body>
+    <!-- Skip link: primer elemento enfocable de la página. Invisible
+         hasta que recibe foco con Tab. Permite a quien navega con
+         teclado saltarse el nav entero. Es requisito de WCAG, no
+         un extra. -->
+    <a class="skip-link" href="#contenido">Saltar al contenido</a>
+
+    <slot />
+  </body>
+
+
+</html>
+
+<style>
+    .skip-link {
+        position: absolute;
+    /* Fuera de pantalla, pero NO con display:none ni visibility:hidden,
+        que lo sacarían del orden de tabulación. */
+        top: -100%;
+        left: var(--gutter);
+        z-index: var(--z-modal);
+        padding: 12px 20px;
+        background: var(--surface);
+        color: var(--ink);
+        border: 1px solid var(--line-strong);
+        border-radius: var(--radius);
+        text-decoration: none;
+    }
+    .skip-link:focus-visible {
+        top: 12px;
+    }    
+</style>

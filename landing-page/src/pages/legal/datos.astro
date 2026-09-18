@@ -1,0 +1,224 @@
+---
+/**
+ * ⚠️ DOCUMENTO NO REVISADO POR ABOGADO ⚠️
+ *
+ * Aviso de privacidad según el contenido mínimo del Decreto 1377 de 2013
+ * art. 15 (compilado en el Decreto 1074 de 2015), más el procedimiento
+ * práctico para ejercer derechos.
+ *
+ * NO PUBLICAR con bloques <span class="pendiente"> sin rellenar.
+ *
+ * POR QUÉ EXISTE Y NO DUPLICA A /legal/privacidad: el aviso es el
+ * instrumento corto y en lenguaje llano; la política es el completo. Aquí
+ * vive además el "cómo se hace" — qué escribir, a dónde y qué plazos hay.
+ * Si alguna vez los dos se contradicen, manda la política.
+ */
+import LegalLayout from '@/layouts/LegalLayout.astro';
+
+const secciones = [
+  { id: 'resumen', titulo: 'Lo esencial en treinta segundos' },
+  { id: 'quien', titulo: 'Quién responde' },
+  { id: 'que', titulo: 'Qué datos y para qué' },
+  { id: 'derechos', titulo: 'Qué puedes pedirnos' },
+  { id: 'como', titulo: 'Cómo presentar una solicitud' },
+  { id: 'plazos', titulo: 'Cuánto tardamos en responder' },
+  { id: 'incompleta', titulo: 'Si tu solicitud está incompleta' },
+  { id: 'inconforme', titulo: 'Si no quedas conforme' },
+  { id: 'vigencia', titulo: 'Vigencia' },
+];
+---
+
+<LegalLayout
+  title="Aviso de Privacidad — CIFRA"
+  description="La versión breve sobre el tratamiento de tus datos en CIFRA, y el procedimiento concreto para consultar, corregir, suprimir o revocar: qué escribir, a dónde y en qué plazos respondemos."
+  titulo="Aviso de Privacidad"
+  sumario="La versión corta, y sobre todo el procedimiento: qué escribir, a dónde enviarlo y cuánto tardamos. El documento completo es la Política de Tratamiento."
+  ruta="/legal/datos"
+  secciones={secciones}
+>
+  <h2 id="resumen">1. Lo esencial en treinta segundos</h2>
+
+  <ul>
+    <li>
+      Tus datos son tuyos. Nosotros los tratamos para que CIFRA funcione, y
+      para nada más.
+    </li>
+    <li><strong>No vendemos datos a nadie.</strong></li>
+    <li>
+      <strong>No entrenamos modelos de IA con tu información financiera.</strong>
+    </li>
+    <li>
+      El permiso que pediríamos a tu banco es de <strong>solo lectura</strong>:
+      ver movimientos, nunca moverlos.
+    </li>
+    <li>
+      Puedes revocar tu autorización cuando quieras, sin explicar por qué.
+    </li>
+    <li>
+      <strong>Hoy CIFRA no está tratando datos de nadie:</strong> el servicio
+      está en desarrollo y el formulario de registro no guarda nada.
+    </li>
+  </ul>
+
+  <p>
+    El detalle completo está en la
+    <a href="/legal/privacidad">Política de Tratamiento de la Información</a>.
+    Si algo de este aviso y de esa política parecieran contradecirse, manda
+    la política.
+  </p>
+
+  <h2 id="quien">2. Quién responde</h2>
+
+  <div class="bloque">
+    <p>
+      <strong>Responsable:</strong> <span class="pendiente">[NOMBRE COMPLETO]</span><br />
+      <strong>Dirección de notificaciones:</strong> <span class="pendiente">[DIRECCIÓN]</span><br />
+      <strong>Correo electrónico:</strong> <span class="pendiente">[CORREO]</span><br />
+      <strong>Teléfono:</strong> <span class="pendiente">[TELÉFONO]</span>
+    </p>
+  </div>
+
+  <h2 id="que">3. Qué datos y para qué</h2>
+
+  <div class="tabla">
+    <table>
+      <thead>
+        <tr>
+          <th>Datos</th>
+          <th>Para qué</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Nombre y correo electrónico</td>
+          <td>Crear tu cuenta y comunicarnos contigo</td>
+        </tr>
+        <tr>
+          <td>Movimientos y saldos de las cuentas que conectes</td>
+          <td>Identificar a qué factura corresponde cada pago que recibes</td>
+        </tr>
+        <tr>
+          <td>Datos de tus facturas y de tus clientes</td>
+          <td>Emitir facturas electrónicas a tu nombre ante la DIAN</td>
+        </tr>
+        <tr>
+          <td>Registro de tus aprobaciones y rechazos</td>
+          <td>Que cada decisión del asistente quede auditada y sea reversible</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p>
+    La lista completa de finalidades está en el
+    <a href="/legal/privacidad#finalidades">apartado 6 de la política</a>.
+  </p>
+
+  <h2 id="derechos">4. Qué puedes pedirnos</h2>
+
+  <ul>
+    <li><strong>Conocer</strong> qué datos tuyos tenemos. Es gratis.</li>
+    <li><strong>Actualizar o corregir</strong> los que estén mal o incompletos.</li>
+    <li><strong>Suprimir</strong> los que no debamos seguir tratando.</li>
+    <li><strong>Revocar</strong> la autorización que nos diste.</li>
+    <li><strong>Pedir prueba</strong> de la autorización que otorgaste.</li>
+    <li><strong>Saber</strong> qué uso le hemos dado a tus datos.</li>
+  </ul>
+
+  <h2 id="como">5. Cómo presentar una solicitud</h2>
+
+  <p>
+    Escribe a <span class="pendiente">[CORREO]</span>. No hay formulario ni
+    formato obligatorio; basta un correo. Para que podamos resolverlo a la
+    primera, incluye:
+  </p>
+
+  <ol>
+    <li>Tu nombre completo.</li>
+    <li>
+      El correo con el que te registraste, si es distinto del que usas para
+      escribirnos.
+    </li>
+    <li>
+      Qué quieres: consultar, corregir, suprimir o revocar. Con decirlo en
+      una frase basta.
+    </li>
+    <li>
+      Si es una corrección, cuál es el dato correcto. Si es una supresión,
+      a qué datos te refieres.
+    </li>
+    <li>
+      Una dirección —física o electrónica— donde quieras recibir la respuesta.
+    </li>
+  </ol>
+
+  <p>
+    Puedes presentarla tú, o alguien en tu nombre acreditando que te
+    representa. También pueden hacerlo los causahabientes de una persona
+    fallecida.
+  </p>
+
+  <h2 id="plazos">6. Cuánto tardamos en responder</h2>
+
+  <div class="tabla">
+    <table>
+      <thead>
+        <tr>
+          <th>Si pides…</th>
+          <th>Es una…</th>
+          <th>Respondemos en</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Saber qué datos tuyos tenemos</td>
+          <td>Consulta</td>
+          <td><strong>10 días hábiles</strong>, prorrogables 5 más</td>
+        </tr>
+        <tr>
+          <td>Corregir, actualizar, suprimir o revocar</td>
+          <td>Reclamo</td>
+          <td><strong>15 días hábiles</strong>, prorrogables 8 más</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p>
+    Los plazos de reclamo cuentan desde el día siguiente a que recibimos tu
+    solicitud. Si necesitamos una prórroga, te diremos el motivo y la fecha
+    exacta en que responderemos, antes de que venza el plazo original.
+  </p>
+
+  <p class="norma">Ley 1581 de 2012, arts. 14 y 15.</p>
+
+  <h2 id="incompleta">7. Si tu solicitud está incompleta</h2>
+
+  <p>
+    Te lo diremos dentro de los <strong>5 días</strong> siguientes a recibirla,
+    indicando qué falta. Si pasan <strong>dos meses</strong> sin que
+    completes la información, la ley entiende que desististe — pero nada te
+    impide volver a presentarla después.
+  </p>
+
+  <h2 id="inconforme">8. Si no quedas conforme</h2>
+
+  <p>
+    Puedes presentar una queja ante la
+    <strong>Superintendencia de Industria y Comercio</strong>, que es la
+    autoridad de protección de datos personales en Colombia.
+  </p>
+
+  <p>
+    La ley pide que antes hayas presentado tu solicitud ante nosotros y que
+    hayamos respondido o se nos haya vencido el plazo. No es un trámite para
+    entorpecerte: es para que la autoridad tenga algo que revisar.
+  </p>
+
+  <h2 id="vigencia">9. Vigencia</h2>
+
+  <p>
+    Este aviso rige desde <span class="pendiente">[FECHA DE VIGENCIA]</span> y
+    se mantiene mientras esté publicado.
+  </p>
+</LegalLayout>

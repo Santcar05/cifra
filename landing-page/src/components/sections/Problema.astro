@@ -1,0 +1,230 @@
+---
+/**
+ * §01 — El problema.
+ *
+ * Rejilla asimétrica: la fotografía sale del contenedor y llega al borde
+ * izquierdo de la ventana. Eso es lo que sustituye al trabajo estructural
+ * que hacían las hairlines — una imagen que rompe el margen da más
+ * cohesión que dos líneas de 1px, y no se lee como plantilla.
+ */
+import Photo from '@components/ui/Photo.astro';
+import libroMayor from '@/assets/fotos/libro-mayor.jpg';
+
+const lines = [
+  { label: 'Factura #41', amount: '1.400,00' },
+  { label: 'Factura #43', amount: '1.010,00' },
+  { label: 'Comisión Payoneer', amount: '−29,40' },
+  { label: 'Diferencia en cambio', amount: '−40,42' },
+];
+---
+
+<section id="problema" class="full band section reveal problema" aria-labelledby="problema-h">
+  <div class="inner problema__grid">
+    {/* El sangrado va en este div, no en <Photo>: los estilos con ámbito de
+        Astro no alcanzan la raíz de un componente hijo, y el margen negativo
+        se quedaba en 0. */}
+    <div class="problema__bleed">
+      {/* 3:2 es la proporción NATIVA del archivo (1600×1064). Forzarla a
+          4:5 recortaba un tercio de la imagen por los lados. */}
+      <Photo
+        src={libroMayor}
+        alt="Página de un libro mayor manuscrito: columnas de cifras trazadas a plumilla, una debajo de otra."
+        ratio="2 / 2"
+        sizes="(max-width: 64rem) 100vw, 52vw"
+      />
+    </div>
+
+    <div class="problema__copy">
+      <h2 id="problema-h" class="h2">
+        Un pago de USD&nbsp;2.340,18 que no corresponde a ninguna factura.
+      </h2>
+
+      <hr class="rule-olive" />
+
+      <p class="lede">
+        No es un error del banco. Son dos facturas cobradas juntas, menos la
+        comisión de la pasarela, menos la diferencia de conversión del día.
+        Cuadrarlo a mano toma veinte minutos.
+      </p>
+
+      <figure class="statement">
+        <figcaption class="statement__head">
+          <span class="statement__label">Recibido, 14 de marzo</span>
+          <span class="statement__total">USD 2.340,18</span>
+        </figcaption>
+
+        <ul class="statement__list">
+          {lines.map((l, i) => (
+            <li class="statement__row" style={`--row:${i}`}>
+              <span class="statement__name">{l.label}</span>
+              <span class="statement__amount">{l.amount}</span>
+            </li>
+          ))}
+        </ul>
+
+        <div class="statement__sum">
+          <span class="statement__name">Imputado</span>
+          <span class="statement__amount">2.340,18</span>
+        </div>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<style>
+  /* overflow-x: clip absorbe el error del ancho de la barra de scroll sin
+     crear contenedor de scroll — a diferencia de hidden. Es lo que permite
+     usar 100vw en el sangrado sin provocar barra horizontal en Windows. */
+  .problema {
+    overflow-x: clip;
+  }
+
+  /* La imagen manda: 52/48 a su favor, no 42/58 en contra. */
+  .problema__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 52fr) minmax(0, 48fr);
+    gap: clamp(32px, 4vw, 64px);
+    align-items: center;
+  }
+
+  /* La foto llega hasta el borde izquierdo de la ventana.
+     El tirón es: el gutter, más el margen que deja el contenedor centrado
+     cuando la ventana es más ancha que él.
+     No se usa `50% - 50vw`: dentro de un grid los porcentajes de margen se
+     resuelven contra el área de la CELDA, no contra el contenedor, y esa
+     fórmula daría un valor equivocado. */
+  .problema__bleed {
+    margin-inline-start: calc(
+      -1 * (var(--gutter) + max(0px, (100vw - var(--container)) / 2))
+    );
+  }
+
+  .problema__bleed :global(.photo) {
+    border-start-end-radius: var(--radius-card);
+    border-end-end-radius: var(--radius-card);
+  }
+
+  .statement {
+    margin: 32px 0 0;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-card);
+    padding: 22px 24px;
+    max-width: 30rem;
+  }
+
+  .statement__head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 16px;
+    padding-block-end: 14px;
+    border-block-end: 1px solid var(--line);
+  }
+
+  .statement__label {
+    font-size: 13px;
+    color: var(--text-secondary);
+  }
+
+  .statement__total {
+    font-family: var(--font-mono);
+    font-size: 19px;
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: 'tnum' 1;
+    color: var(--ink);
+  }
+
+  .statement__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .statement__row,
+  .statement__sum {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    padding-block: 12px;
+    font-family: var(--font-mono);
+    font-size: 14px;
+  }
+
+  .statement__row {
+    border-block-end: 1px solid var(--line);
+  }
+
+  .statement__name {
+    color: var(--text-secondary);
+  }
+
+  .statement__amount {
+    color: var(--ink);
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: 'tnum' 1;
+  }
+
+  .statement__sum {
+    margin-block-start: 4px;
+    padding-block-start: 14px;
+    border-block-start: 2px solid var(--olive-700);
+    font-size: 15px;
+  }
+
+  .statement__sum .statement__name {
+    color: var(--ink);
+  }
+
+  /* El escalonado por fila es la única excepción de la página, y está
+     justificado: no es decoración, es la secuencia de un cálculo. Cada
+     línea suma a la anterior, y verlas llegar en orden es el argumento. */
+  .statement__row,
+  .statement__sum {
+    opacity: 0;
+    translate: 0 6px;
+    transition:
+      opacity 340ms var(--ease-out),
+      translate 340ms var(--ease-out);
+  }
+
+  :global(.reveal.is-in) .statement__row,
+  :global(.reveal.is-in) .statement__sum {
+    opacity: 1;
+    translate: 0 0;
+  }
+
+  :global(.reveal.is-in) .statement__row {
+    transition-delay: calc(240ms + var(--row) * 110ms);
+  }
+
+  :global(.reveal.is-in) .statement__sum {
+    transition-delay: 800ms;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .statement__row,
+    .statement__sum {
+      opacity: 1;
+      translate: none;
+      transition: none;
+    }
+  }
+
+  @media (width < 64rem) {
+    .problema__grid {
+      grid-template-columns: 1fr;
+      gap: 40px;
+    }
+
+    .problema__bleed {
+      /* A ancho completo sale por los dos lados. */
+      margin-inline: calc(-1 * var(--gutter));
+    }
+
+    .problema__bleed :global(.photo) {
+      aspect-ratio: 16 / 10;
+      border-radius: 0;
+    }
+  }
+</style>

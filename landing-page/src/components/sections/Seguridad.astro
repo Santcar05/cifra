@@ -1,0 +1,115 @@
+---
+/**
+ * §06 — Seguridad y cumplimiento. Compacta.
+ *
+ * Iconos de Lucide, no dibujados a mano: trazo, proporción y radio
+ * consistentes en los cuatro. Nunca rellenos, nunca dentro de un círculo
+ * pastel, nunca emojis. Sobrio, sin sellos ni insignias de colores — los
+ * sellos de confianza con colores restan credibilidad en vez de darla.
+ */
+import Icon from '@components/ui/Icon.astro';
+
+const claims = [
+  {
+    icon: 'file-check' as const,
+    title: 'Facturación validada por la DIAN',
+    body: 'Cada factura sale con su CUFE y queda registrada ante la autoridad.',
+  },
+  {
+    icon: 'lock' as const,
+    title: 'No custodiamos tus fondos',
+    body: 'CIFRA lee tus movimientos. Nunca tiene permiso para moverlos.',
+  },
+  {
+    icon: 'rotate-ccw' as const,
+    title: 'Consentimiento revocable',
+    body: 'Desconectas una cuenta cuando quieras, sin pedirle permiso a nadie.',
+  },
+  {
+    icon: 'scroll-text' as const,
+    title: 'Cada decisión de la IA queda auditada',
+    body: 'Qué propuso, en qué se basó, quién la aprobó y cuándo.',
+  },
+];
+---
+
+<section
+  id="seguridad"
+  class="full band band--sunken section--compact reveal"
+  aria-labelledby="seg-h"
+>
+  <div class="inner">
+    <h2 id="seg-h" class="sr-only">Seguridad y cumplimiento</h2>
+
+    <ul class="claims">
+      {claims.map((c) => (
+        <li class="claim">
+          <Icon name={c.icon} size={22} class="claim__icon" />
+          <div>
+            <h3 class="claim__title">{c.title}</h3>
+            <p class="claim__body">{c.body}</p>
+          </div>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .claims {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: clamp(24px, 3vw, 44px);
+  }
+
+  .claim {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 12px;
+    align-items: start;
+  }
+
+  .claim :global(.claim__icon) {
+    flex: none;
+    color: var(--olive-700);
+    margin-block-start: 1px;
+  }
+
+  .claim__title {
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.4;
+    color: var(--ink);
+  }
+
+  .claim__body {
+    font-size: 13px;
+    line-height: 1.6;
+    color: var(--text-secondary);
+    margin-block-start: 4px;
+  }
+
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  @media (width < 70rem) {
+    .claims {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (width < 38rem) {
+    .claims {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

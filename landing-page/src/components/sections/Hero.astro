@@ -1,0 +1,171 @@
+---
+import HeroVisual from '@components/ui/HeroVisual.astro';
+---
+
+<section class="full band band--ink hero">
+  <div class="inner hero__grid">
+    <div class="hero__copy">
+      <h1 class="hero__display">
+        <span>Tu plata,</span>
+        <span>cuadrada sola.</span>
+      </h1>
+
+      <hr class="hero__rule" />
+
+      <p class="hero__sub">
+        Conecta Nequi, Nu, Wise o Stripe. CIFRA reconoce a qué factura
+        corresponde cada pago que entra, aparta tus impuestos al instante
+        y deja tu declaración lista.
+      </p>
+
+      <div class="hero__actions">
+        <a class="btn btn--primary" href="/empezar">Empieza gratis</a>
+        <a class="btn btn--secondary" href="#como-funciona">Ver cómo funciona</a>
+      </div>
+
+      <p class="hero__caption">
+        Sin tarjeta. Conecta una cuenta y mira qué encuentra.
+      </p>
+    </div>
+
+    <div class="hero__visual-wrap">
+      <HeroVisual />
+
+      <aside class="hero__card">
+        <p class="hero__card-label">DISPONIBLE REAL</p>
+        <p class="hero__card-amount">$1.950.000</p>
+        <hr class="hero__card-rule" />
+        <div class="hero__card-breakdown">
+          <span>Renta&nbsp;&nbsp;412.000</span>
+          <span>IVA&nbsp;&nbsp;0</span>
+          <span>PILA&nbsp;&nbsp;308.000</span>
+        </div>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero {
+    min-height: 88svh;
+    display: flex;
+    align-items: center;
+    padding-block: calc(64px + 72px) 96px;
+  }
+
+  .hero__grid {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 54fr 46fr;
+    gap: clamp(32px, 5vw, 72px);
+    align-items: center;
+  }
+
+  .hero__eyebrow {
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    color: var(--olive-400);
+    margin-block-end: 24px;
+  }
+
+  .hero__display {
+    font-size: clamp(48px, 9vw, 96px);
+    line-height: 0.98;
+    letter-spacing: -0.04em;
+    font-weight: 500;
+    color: var(--on-ink-primary);
+  }
+
+  .hero__display span { display: block; }
+
+  .hero__rule {
+    width: 120px;
+    height: 3px;
+    background: var(--olive-400);
+    border: 0;
+    margin-block: 28px;
+    margin-inline: 0;
+  }
+
+  .hero__sub {
+    font-size: 18px;
+    line-height: 1.7;
+    max-width: 52ch;
+    color: var(--on-ink-secondary);
+  }
+
+  .hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-block-start: 36px;
+  }
+
+  .hero__caption {
+    font-size: 14px;
+    color: var(--on-ink-caption);
+    margin-block-start: 24px;
+  }
+
+  .hero__visual-wrap { position: relative; }
+
+  .hero__card {
+    position: absolute;
+    inset-block-end: -28px;
+    inset-inline-end: -32px;
+    width: 300px;
+    padding: 20px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-card);
+    color: var(--ink);
+  }
+
+  .hero__card-label {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    color: var(--text-secondary);
+  }
+
+  .hero__card-amount {
+    font-family: var(--font-mono);
+    font-size: 32px;
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: "tnum" 1;
+    color: var(--ink);
+    margin-block-start: 8px;
+  }
+
+  .hero__card-rule {
+    height: 2px;
+    background: var(--olive-700);
+    border: 0;
+    margin-block: 14px;
+  }
+
+  .hero__card-breakdown {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-variant-numeric: tabular-nums;
+    color: var(--text-secondary);
+    display: grid;
+    gap: 4px;
+  }
+
+  @media (width < 60rem) {
+    .hero__grid { grid-template-columns: 1fr; gap: 48px; }
+    .hero__display span { display: block; }
+    .hero__card {
+      position: static;
+      width: 100%;
+      max-width: 340px;
+      margin-block-start: 32px;
+    }
+  }
+
+  @media (width < 30rem) {
+    .hero__display span { display: inline; }
+  }
+</style>

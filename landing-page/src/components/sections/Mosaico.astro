@@ -1,0 +1,173 @@
+---
+/**
+ * Mosaico — el rastro de papel.
+ *
+ * Tres imágenes, no cinco, y en una composición de DOS columnas en vez de
+ * alturas dispares. La versión anterior tenía cinco piezas con desfases
+ * distintos y se leía como collage: la irregularidad solo funciona cuando
+ * hay una estructura clara debajo que romper.
+ *
+ * Aquí la estructura es evidente — una columna alta a la izquierda, dos
+ * apiladas a la derecha — y la ruptura es una sola: la vertical se sale
+ * hasta el borde de la ventana.
+ *
+ * La sección existe por un argumento, no por decoración: estas fotos son
+ * el trabajo manual que CIFRA sustituye.
+ */
+import Photo from '@components/ui/Photo.astro';
+
+import sobres from '@/assets/fotos/sobres.jpg';
+import libroAbierto from '@/assets/fotos/libro-abierto.jpg';
+import manuscritos from '@/assets/fotos/manuscritos.jpg';
+---
+
+<section class="full band band--ink section reveal mosaico" aria-labelledby="mosaico-h">
+  <div class="inner">
+    <div class="mosaico__head">
+      <h2 id="mosaico-h" class="h2">Todo esto lo hacías a mano.</h2>
+      <p class="mosaico__lede">
+        Cada uno de estos registros existía para responder una sola pregunta:
+        cuánto entró, de quién, y cuánto de eso no era tuyo.
+      </p>
+    </div>
+
+    <div class="mosaico__grid">
+      {/* La vertical ocupa las dos filas y sangra hasta el borde. */}
+      <div class="mosaico__tall">
+        <Photo
+          src={sobres}
+          index={0}
+          alt="Sobres de papel kraft apilados uno tras otro, formando una trama que se pierde en el fondo."
+          sizes="(max-width: 31rem) 100vw, 40vw"
+        />
+      </div>
+
+      {/* Sin prop `ratio`: aquí la altura la manda la rejilla, no cada
+          imagen. Con una proporción por imagen, el alto sale del ANCHO —
+          y a 1/2 sobre una columna de 629px eso son 1258px por pieza,
+          más de 2500px las dos: tres pantallas de alto. */}
+      <Photo
+        class="mosaico__a"
+        src={libroAbierto}
+        index={1}
+        alt="Libro de contabilidad abierto, el papel amarilleado por los años y los asientos escritos a mano."
+        sizes="(max-width: 62rem) 100vw, 52vw"
+      />
+
+      <Photo
+        class="mosaico__b"
+        src={manuscritos}
+        index={2}
+        alt="Detalle de documentos manuscritos del siglo XIX apilados sobre libros encuadernados."
+        sizes="(max-width: 62rem) 100vw, 52vw"
+      />
+    </div>
+  </div>
+</section>
+
+<style>
+  .mosaico {
+    overflow-x: clip;
+  }
+
+  .mosaico__head {
+    max-width: 62ch;
+    margin-block-end: clamp(40px, 5vw, 64px);
+  }
+
+  .mosaico__lede {
+    margin-block-start: 20px;
+    max-width: 46ch;
+    font-size: 16px;
+    line-height: 1.7;
+    color: var(--on-ink-secondary);
+  }
+
+  /* Dos columnas y dos filas. Sin desfases ni márgenes sueltos: la
+     irregularidad vive en una sola decisión, el sangrado de la vertical.
+
+     LA ALTURA LA MANDA LA REJILLA, en unidades de pantalla, no las
+     proporciones de las imágenes. Es la diferencia entre "cada foto decide
+     cuánto mide" —y entonces dos apiladas suman dos o tres pantallas— y
+     "la composición entera cabe de una mirada".
+     Las filas son 1fr cada una, así que se reparten esa altura y las
+     imágenes recortan con object-fit en vez de estirarse. */
+  .mosaico__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 40fr) minmax(0, 60fr);
+    grid-template-rows: 1fr 1fr;
+    gap: clamp(14px, 1.8vw, 24px);
+    height: clamp(420px, 72vh, 700px);
+  }
+
+  /* min-height: 0 es obligatorio: por defecto un elemento de grid no baja
+     de su tamaño mínimo de contenido, y sin esto las filas 1fr se
+     desbordarían igualmente. */
+  .mosaico__grid > *,
+  .mosaico__grid :global(.photo) {
+    min-height: 0;
+    height: 100%;
+  }
+
+  .mosaico__tall {
+    grid-column: 1;
+    grid-row: 1 / 3;
+    margin-inline-start: calc(
+      -1 * (var(--gutter) + max(0px, (100vw - var(--container)) / 2))
+    );
+  }
+
+  /* La vertical se estira a toda la altura de las dos filas. object-fit
+     cover recorta, pero de vertical a más vertical: la imagen sigue
+     leyéndose igual, que es lo que importa. */
+  .mosaico__tall :global(.photo) {
+    height: 100%;
+    border-start-end-radius: var(--radius-card);
+    border-end-end-radius: var(--radius-card);
+  }
+
+  .mosaico__grid :global(.mosaico__a) {
+    grid-column: 2;
+    grid-row: 1;
+    border-radius: var(--radius-card);
+  }
+
+  .mosaico__grid :global(.mosaico__b) {
+    grid-column: 2;
+    grid-row: 2;
+    border-radius: var(--radius-card);
+  }
+
+  /* En una columna la altura fija ya no sirve: se vuelve a proporción por
+     imagen, que en vertical sí es lo correcto. */
+  @media (width < 62rem) {
+    .mosaico__grid {
+      grid-template-columns: 1fr;
+      grid-template-rows: none;
+      height: auto;
+    }
+
+    .mosaico__grid > *,
+    .mosaico__grid :global(.photo) {
+      height: auto;
+    }
+
+    .mosaico__tall {
+      grid-column: 1;
+      grid-row: auto;
+      margin-inline: calc(-1 * var(--gutter));
+    }
+
+    .mosaico__tall :global(.photo) {
+      aspect-ratio: 4 / 3;
+      border-radius: 0;
+    }
+
+    .mosaico__grid :global(.mosaico__a),
+    .mosaico__grid :global(.mosaico__b) {
+      grid-column: 1;
+      grid-row: auto;
+      aspect-ratio: 3 / 2;
+    }
+  }
+</style>

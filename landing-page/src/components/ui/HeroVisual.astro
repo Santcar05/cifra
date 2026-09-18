@@ -1,0 +1,213 @@
+---
+/**
+ * HeroVisual — visual del héroe de CIFRA.
+ *
+ * Dos capas, siempre las dos presentes:
+ *
+ *   SVG      Se pinta en el HTML inicial. Es el póster de carga, el fallback
+ *            permanente y lo único que se ve bajo prefers-reduced-motion.
+ *   Canvas   Escena 3D con proyección en perspectiva real (./HeroScene.ts).
+ *            Se importa de forma diferida y se revela por encima solo cuando
+ *            tiene su primer frame listo.
+ *
+ * ── POR QUÉ NO THREE.JS ───────────────────────────────────────────────
+ * Se evaluó y se descartó: `three/webgpu` son ~600 KB en una landing cuyo
+ * argumento entero es no enviar JavaScript. HeroScene.ts hace el mismo
+ * trabajo en ~6 KB, porque lo que produce volumen es la proyección
+ * s = FOV / (FOV + z), no el motor que la ejecuta.
+ *
+ * Si algún día la escena necesita iluminación, materiales o geometría
+ * cargada, ahí sí cambia el cálculo. Hoy no los necesita.
+ *
+ * ── LO QUE NO SE TOCA ─────────────────────────────────────────────────
+ * El contenedor lleva `aspect-ratio: 800/640` y `position: relative`. Eso
+ * reserva la altura a partir del ancho ANTES de pintar nada dentro, y es
+ * lo que hace que el canvas entre sin mover un solo píxel del layout.
+ * Cero CLS. No lo quites.
+ * ──────────────────────────────────────────────────────────────────────
+ */
+
+interface Props {
+  /** 'canvas' añade la escena 3D encima del SVG. 'svg' deja solo el póster. */
+  variant?: 'svg' | 'canvas';
+}
+
+const { variant = 'canvas' } = Astro.props;
+
+/** Las seis curvas entrantes. Coordenadas en unidades del viewBox. */
+const curves = [
+  'M -40 110 C 180 150, 330 290, 470 318',
+  'M -40 210 C 180 230, 340 300, 470 320',
+  'M -40 330 C 160 330, 340 322, 470 322',
+  'M -40 450 C 180 430, 340 350, 470 326',
+  'M 140 -40 C 200 140, 360 260, 470 316',
+  'M 330 -40 C 350 120, 420 240, 472 314',
+];
+
+/** Los cuatro trazos de salida: uno grueso, tres finos en oliva. */
+const outputs = [
+  { d: 'M 506 320 C 620 320, 700 318, 840 316', w: 2.5, olive: false },
+  { d: 'M 506 326 C 620 360, 700 420, 840 470', w: 1,   olive: true  },
+  { d: 'M 506 322 C 620 330, 700 350, 840 372', w: 1,   olive: true  },
+  { d: 'M 506 314 C 620 280, 700 230, 840 176', w: 1,   olive: true  },
+];
+---
+
+<div class="hero-visual" data-variant={variant}>
+  <svg viewBox="0 0 800 640" fill="none" aria-hidden="true">
+    {curves.map((d, i) => (
+      <path class="hero-visual__curve" d={d} pathLength="1" style={`--i:${i}`} />
+    ))}
+
+    {/* El rombo: el momento de la conciliación */}
+    <path class="hero-visual__node" d="M 488 306 L 502 320 L 488 334 L 474 320 Z" />
+
+    {outputs.map((o) => (
+      <path
+        class:list={['hero-visual__out', { 'is-olive': o.olive }]}
+        d={o.d}
+        pathLength="1"
+        style={`stroke-width:${o.w}`}
+      />
+    ))}
+
+    {/* Los puntos viajeros van DENTRO del SVG: offset-path interpreta
+        path() en píxeles, y solo aquí coinciden con el viewBox. */}
+    {curves.map((d, i) => (
+      <circle
+        class="hero-visual__dot"
+        r="3"
+        style={`offset-path: path("${d}"); --i:${i}`}
+      />
+    ))}
+  </svg>
+</div>
+
+<style>
+  .hero-visual {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 800 / 640;
+  }
+
+  .hero-visual > svg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+  }
+
+  .hero-visual__curve,
+  .hero-visual__out {
+    stroke: rgb(247 246 243 / 0.22);
+    stroke-width: 1.25;
+    stroke-linecap: round;
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    animation: hv-draw 14s linear infinite;
+  }
+
+  .hero-visual__out {
+    stroke: var(--on-ink-primary);
+    animation-delay: -6s;
+  }
+
+  .hero-visual__out.is-olive { stroke: var(--olive-400); }
+
+  .hero-visual__node {
+    stroke: var(--on-ink-primary);
+    stroke-width: 1;
+    fill: none;
+  }
+
+  /* Retardos NEGATIVOS: arrancan ya avanzadas, no esperando.
+     El índice llega como --i desde el template, y el retardo se calcula.
+     Robusto: no depende del orden de los elementos en el SVG. */
+  .hero-visual__curve,
+  .hero-visual__dot {
+    animation-delay: calc(var(--i, 0) * -2.333s);
+  }
+
+  @keyframes hv-draw {
+    0%   { stroke-dashoffset:  1; }
+    45%  { stroke-dashoffset:  0; }
+    55%  { stroke-dashoffset:  0; }
+    100% { stroke-dashoffset: -1; }
+  }
+
+  /* Punto luminoso: oculto salvo que el navegador confirme soporte. */
+  .hero-visual__dot {
+    display: none;
+    fill: var(--on-ink-primary);
+    offset-distance: 0%;
+    offset-rotate: 0deg;
+    animation: hv-travel 14s linear infinite;
+  }
+
+  @supports (offset-path: path("M 0 0 L 1 1")) {
+    .hero-visual__dot { display: block; }
+  }
+
+  @keyframes hv-travel {
+    0%   { offset-distance:   0%; opacity: 0; }
+    8%   { opacity: 1; }
+    45%  { offset-distance: 100%; opacity: 1; }
+    52%  { opacity: 0; }
+    100% { offset-distance: 100%; opacity: 0; }
+  }
+
+  /* Movimiento reducido: el dibujo COMPLETO y quieto. No oculto. */
+  @media (prefers-reduced-motion: reduce) {
+    .hero-visual__curve,
+    .hero-visual__out {
+      animation: none;
+      stroke-dashoffset: 0;
+    }
+    .hero-visual__dot { display: none; }
+  }
+
+  /* --- La capa 3D -------------------------------------------------------
+     El canvas nace invisible. HeroScene añade .is-canvas-ready al contenedor
+     cuando tiene su primer frame, y solo entonces cruzan: entra el canvas,
+     se retira el SVG. Sin ese relevo se vería un parpadeo en negro. */
+  .hero-visual :global(.hero-visual__canvas) {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: opacity 600ms var(--ease-out);
+  }
+
+  .hero-visual.is-canvas-ready :global(.hero-visual__canvas) {
+    opacity: 1;
+  }
+
+  .hero-visual.is-canvas-ready > svg {
+    opacity: 0;
+    transition: opacity 600ms var(--ease-out);
+  }
+</style>
+
+<script>
+  import type { mount as MountFn } from './HeroScene';
+
+  const nodes = document.querySelectorAll<HTMLElement>(
+    '.hero-visual[data-variant="canvas"]',
+  );
+
+  // Quien pidió menos movimiento se queda con el SVG estático, que ya está
+  // pintado y completo. No es "sin contenido": es el mismo dibujo, quieto.
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  if (nodes.length && !reduced) {
+    // Import diferido: la escena NO entra en la ruta crítica. El héroe ya
+    // se pintó con el SVG antes de que este módulo se descargue siquiera.
+    import('./HeroScene')
+      .then(({ mount }: { mount: typeof MountFn }) => {
+        nodes.forEach((el) => mount(el));
+      })
+      .catch(() => {
+        /* Sin escena, el SVG se queda. Es un fallback, no un error. */
+      });
+  }
+</script>

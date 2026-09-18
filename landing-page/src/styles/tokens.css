@@ -1,0 +1,125 @@
+/* =========================================================================
+   TOKENS DE CIFRA
+   Los valores vienen del spec de diseño. Las dos líneas marcadas con ⚠️
+   corrigen fallos de contraste medidos contra WCAG AA.
+   ========================================================================= */
+
+:root {
+  color-scheme: light;
+
+  /* --- Neutros cálidos ------------------------------------------------ */
+  --canvas: #f7f6f3;
+  --surface: #ffffff;
+  --surface-sunken: #efede8;
+  --line: #e3e0d9;
+  --line-strong: #cfcbc1;
+  --ink: #1a1815; /* 16.8:1 sobre --canvas  ✔ */
+  --text-secondary: #5a564e; /*  6.8:1 sobre --canvas  ✔ */
+  --text-muted: #8a857c; /*  3.4:1 sobre --canvas  ✘ NO usar como texto */
+
+  /* ⚠️ --text-muted FALLA AA como texto legible (3.4:1 < 4.5:1).
+     Se queda en el sistema para apoyo decorativo — separadores, iconos
+     inactivos, un punto medio entre palabras — pero NUNCA para texto
+     que haya que leer, y menos a 12px.
+     Para los marcadores de sección usa --text-secondary. */
+
+  /* --- Marca: azul tinta ---------------------------------------------- */
+  --brand-50: #eff4f9;
+  --brand-100: #d8e4f0;
+  --brand-400: #4a7fb5;
+  --brand-600: #1c4b7e; /* acción primaria */
+  --brand-700: #16375f;
+  --brand-900: #0a1a2f; /* fondos a sangre */
+
+  /* --- Oliva profundo: color firma ------------------------------------ */
+  --olive-100: #e4e8d6;
+  --olive-400: #8ca254; /* único válido sobre fondos oscuros */
+  --olive-500: #55702d;
+  --olive-700: #38491f; /* ← FIRMA, sobre papel */
+  --olive-800: #263314;
+  --olive-900: #161e0b;
+
+  /* --- Estado --------------------------------------------------------- */
+  --state-ok: #17734a;
+  --state-wait: #9a6508;
+  --state-bad: #a32a20;
+
+  /* --- Agente de IA: reservado, jamás decorativo ----------------------- */
+  --agent-600: #5b53c7;
+  --agent-50: #efeefb;
+  --agent-900: #2e2975;
+
+  /* --- Texto sobre fondos oscuros -------------------------------------- */
+  --on-ink-primary: #f7f6f3; /* 17.1:1 sobre brand-900 ✔ */
+  --on-ink-secondary: rgba(247, 246, 243, 0.72); /*  7.8:1 mezclado        ✔ */
+  --on-ink-caption: rgba(247, 246, 243, 0.6); /*  5.8:1 mezclado        ✔ */
+
+  /* ⚠️ El spec pedía 0.45 para el caption del héroe. Mezclado sobre
+     --brand-900 da 3.55:1, que FALLA AA a 12px (necesita 4.5:1).
+     A 0.60 da 5.75:1 y pasa. La diferencia visual es mínima;
+     la diferencia legal y de legibilidad no lo es. */
+
+  --on-ink-line: rgba(247, 246, 243, 0.1); /* hairlines sobre oscuro */
+  --on-ink-border: rgba(247, 246, 243, 0.28); /* borde de botón secundario */
+
+  /* --- Geometría ------------------------------------------------------- */
+  --radius: 8px;
+  --radius-card: 12px;
+  --container: 1200px;
+  --gutter: clamp(20px, 5vw, 64px);
+
+  /* --- Tipografía ------------------------------------------------------ */
+  --font-sans: 'Geist', 'Geist Fallback', system-ui, -apple-system, sans-serif;
+  --font-mono: 'Geist Mono', 'Geist Mono Fallback', ui-monospace, monospace;
+
+  /* --- Curvas de movimiento -------------------------------------------- */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+  --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
+  /* NO existe un --ease-in. Es deliberado: empieza lento, justo cuando
+     el usuario está mirando, y se siente roto. No lo añadas. */
+
+  /* --- Duraciones ------------------------------------------------------ */
+  --dur-press: 140ms; /* :active de botón */
+  --dur-hover: 150ms; /* cambio de fondo */
+  --dur-enter: 250ms; /* entrada de hoja móvil */
+  --dur-exit: 150ms; /* salida — más rápida que la entrada */
+  --dur-reveal: 400ms; /* revelado de sección al entrar en viewport */
+
+  /* --- Escala de z-index, semántica ------------------------------------ */
+  --z-base: 0;
+  --z-rules: 1; /* las hairlines verticales */
+  --z-sticky: 100; /* el header fijo */
+  --z-backdrop: 200;
+  --z-modal: 300; /* la hoja del menú móvil */
+}
+
+/* =========================================================================
+   MODO OSCURO
+   Solo se redefinen los tokens que cambian. Todo lo demás se hereda.
+   ========================================================================= */
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: dark;
+
+    --canvas: #191815;
+    --surface: #211f1b;
+    --surface-sunken: #14130f;
+    --line: #33302a;
+    --line-strong: #45413a;
+    --ink: #edeae3; /* 14.9:1 sobre --canvas ✔ */
+    --text-secondary: #a8a399; /*  7.1:1 sobre --canvas ✔ */
+    --text-muted: #7a756c; /*  3.6:1 — sigue siendo decorativo ✘ */
+
+    --brand-600: #5b94ce; /* aclarado: el 1C4B7E desaparece en oscuro */
+
+    /* El oliva firma se sustituye, NO se invierte.
+       --olive-700 (#38491F) es casi negro: sobre #191815 es invisible.
+       La regla del spec es explícita: sobre oscuro, siempre el 400. */
+    --olive-700: #8ca254;
+
+    --agent-50: #1e1c33;
+    --agent-600: #8b84e8; /* aclarado para mantener la señal */
+  }
+}

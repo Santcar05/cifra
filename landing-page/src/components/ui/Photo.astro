@@ -1,0 +1,69 @@
+---
+/**
+ * Photo — envoltorio de <Image> con el tratamiento de CIFRA.
+ *
+ * Todas las fotografías del sitio pasan por aquí. Centralizar el marco es
+ * lo que garantiza que el gris y el contraste sean idénticos en las ocho:
+ * si cada sección aplicara su propio filtro, se leerían como ocho fotos
+ * sueltas en vez de como una dirección de arte.
+ *
+ * El alt es OBLIGATORIO y forma parte del texto de la página, no es un
+ * trámite de accesibilidad. "Página de un libro mayor manuscrito, columnas
+ * de cifras a plumilla" es voz de marca. "documento" no es nada.
+ */
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+
+interface Props {
+  src: ImageMetadata;
+  alt: string;
+  /** Proporción del marco. La imagen recorta con object-fit: cover. */
+  ratio?: string;
+  /** Índice para escalonar dentro de una composición como el mosaico. */
+  index?: number;
+  /** Anchos que Astro genera para el srcset. */
+  widths?: number[];
+  sizes?: string;
+  class?: string;
+  /** Solo para la imagen del primer pliegue, si alguna vez la hubiera. */
+  eager?: boolean;
+}
+
+const {
+  src,
+  alt,
+  ratio,
+  index,
+  widths = [480, 800, 1200, 1600],
+  sizes = '(max-width: 60rem) 100vw, 50vw',
+  class: className = '',
+  eager = false,
+} = Astro.props;
+
+const style = [
+  ratio ? `aspect-ratio:${ratio}` : null,
+  index !== undefined ? `--i:${index}` : null,
+]
+  .filter(Boolean)
+  .join(';');
+---
+
+<figure class={`photo ${className}`} style={style || undefined}>
+  <Image
+    src={src}
+    alt={alt}
+    widths={widths}
+    sizes={sizes}
+    format="avif"
+    quality={62}
+    loading={eager ? 'eager' : 'lazy'}
+    decoding="async"
+  />
+</figure>
+
+<style>
+  .photo {
+    /* figure trae margen del user agent. */
+    margin: 0;
+  }
+</style>

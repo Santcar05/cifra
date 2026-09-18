@@ -1,0 +1,145 @@
+---
+/**
+ * §02 — Cómo funciona.
+ *
+ * Cuatro pasos SIN tarjetas y sin hairlines verticales: cada uno se apoya
+ * en una regla superior corta. Cuatro tarjetas idénticas con un icono
+ * arriba es exactamente el patrón que hay que evitar.
+ *
+ * Los números 01–04 sí se quedan: son una secuencia real, y ahí el número
+ * informa en vez de decorar.
+ */
+import Photo from '@components/ui/Photo.astro';
+import tipos from '@/assets/fotos/tipos-maquina.jpg';
+
+const steps = [
+  {
+    n: '01',
+    title: 'Conectas tus cuentas',
+    body: 'Nequi, Bancolombia, Wise, Stripe. Lectura solamente: CIFRA nunca obtiene permiso para mover dinero.',
+  },
+  {
+    n: '02',
+    title: 'Facturas desde aquí',
+    body: 'Factura electrónica validada por la DIAN, con su CUFE. Se envía a tu cliente y queda registrada.',
+  },
+  {
+    n: '03',
+    title: 'El pago entra y se concilia solo',
+    body: 'CIFRA reconoce a qué factura corresponde cada entrada, aunque venga partida, agrupada o con comisión.',
+  },
+  {
+    n: '04',
+    title: 'Tus impuestos ya están apartados',
+    body: 'Renta, IVA y PILA se calculan y se reservan en el momento. El saldo que ves es el que de verdad es tuyo.',
+  },
+];
+---
+
+<section
+  id="como-funciona"
+  class="full band band--ink section reveal"
+  aria-labelledby="como-h"
+>
+  <div class="inner">
+    <div class="como__head">
+      <h2 id="como-h" class="h2 pasos__title">
+        Cuatro pasos. Después, nada que hacer.
+      </h2>
+
+      <Photo
+        class="como__photo"
+        src={tipos}
+        alt="Macro de las barras de tipos de una máquina de escribir, alineadas como una fila de datos."
+        ratio="21 / 9"
+        sizes="(max-width: 64rem) 100vw, 46vw"
+      />
+    </div>
+
+    <ol class="pasos">
+      {steps.map((s) => (
+        <li class="paso">
+          <span class="paso__n">{s.n}</span>
+          <h3 class="h3 paso__title">{s.title}</h3>
+          <p class="paso__body">{s.body}</p>
+        </li>
+      ))}
+    </ol>
+  </div>
+</section>
+
+<style>
+  /* Titular y foto conviven en la misma fila: la imagen ancla el bloque y
+     evita que el encabezado flote solo sobre el azul. */
+  .como__head {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: clamp(28px, 4vw, 64px);
+    align-items: center;
+    margin-block-end: clamp(52px, 6.5vw, 90px);
+  }
+
+  .pasos__title {
+    margin-block-end: 0;
+  }
+
+  /* :global porque el ámbito de Astro no alcanza la raíz del hijo. */
+  :global(.como__photo) {
+    border-radius: var(--radius-card);
+  }
+
+  .pasos {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: clamp(22px, 2.8vw, 44px);
+  }
+
+  /* Regla superior corta en vez de hairline vertical: marca el inicio de
+     cada paso sin construir una rejilla de separadores. */
+  .paso {
+    padding-block-start: 20px;
+    border-block-start: 2px solid var(--olive-400);
+  }
+
+  .paso__n {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: clamp(28px, 3.4vw, 42px);
+    font-weight: 500;
+    line-height: 1;
+    letter-spacing: -0.02em;
+    font-variant-numeric: tabular-nums;
+    color: rgb(247 246 243 / 0.22);
+    margin-block-end: 22px;
+  }
+
+  .paso__title {
+    color: var(--on-ink-primary);
+    margin-block-end: 10px;
+  }
+
+  .paso__body {
+    font-size: 15px;
+    line-height: 1.7;
+    color: var(--on-ink-secondary);
+  }
+
+  @media (width < 64rem) {
+    .como__head {
+      grid-template-columns: 1fr;
+    }
+    .pasos {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  @media (width < 40rem) {
+    .pasos {
+      grid-template-columns: 1fr;
+      gap: 32px;
+    }
+  }
+</style>

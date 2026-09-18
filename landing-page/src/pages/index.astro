@@ -1,0 +1,42 @@
+---
+import Layout from '@components/layout/Layout.astro';
+import Header from '@components/layout/Header.astro';
+import LogoWall from '@components/layout/LogoWall.astro';
+import Footer from '@components/layout/Footer.astro';
+
+import Hero from '@components/sections/Hero.astro';
+import Problema from '@components/sections/Problema.astro';
+import ComoFunciona from '@components/sections/ComoFunciona.astro';
+import BandejaAgente from '@components/sections/BandejaAgente.astro';
+import Mosaico from '@components/sections/Mosaico.astro';
+import TresRoles from '@components/sections/TresRoles.astro';
+import Apartado from '@components/sections/Apartado.astro';
+import Seguridad from '@components/sections/Seguridad.astro';
+import Cierre from '@components/sections/Cierre.astro';
+---
+
+<Layout
+  title="CIFRA — Tu plata, cuadrada sola"
+  description="Conecta Nequi, Nu, Wise o Stripe. CIFRA reconoce a qué factura corresponde cada pago que entra, aparta tus impuestos al instante y deja tu declaración lista."
+>
+  <Header />
+
+  <main id="contenido" class="page">
+    <Hero />
+    <LogoWall />
+    <Problema />
+    <ComoFunciona />
+    <BandejaAgente />
+    <Mosaico />
+    <TresRoles />
+    <Apartado />
+    <Seguridad />
+    <Cierre />
+  </main>
+
+  <Footer />
+</Layout>
+
+<script>
+  import '../scripts/reveal';
+</script>

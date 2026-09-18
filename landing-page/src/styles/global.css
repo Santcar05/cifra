@@ -1,0 +1,820 @@
+/* El orden se declara UNA VEZ, arriba del todo, antes de cualquier
+   regla. Es la línea más importante del proyecto: define quién gana. */
+@layer reset, tokens, base, layout, components, utilities;
+
+@import url('./tokens.css') layer(tokens);
+
+/* =========================================================================
+   RESET — mínimo y propio
+   ========================================================================= */
+@layer reset {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  * {
+    margin: 0;
+  }
+
+  html {
+    /* El scroll suave lo activamos aquí, pero se desactiva bajo
+       prefers-reduced-motion (§12). */
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    min-height: 100dvh;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  img,
+  picture,
+  video,
+  canvas,
+  svg {
+    display: block;
+    max-width: 100%;
+  }
+
+  /* El atributo `hidden` solo aplica `display: none` con la especificidad
+     de una regla del user agent — cualquier `display` que pongas en una
+     clase lo pisa sin avisar. Un elemento con `hidden` y `display:grid`
+     se queda visible. El !important aquí no es pereza: es la única forma
+     de que `hidden` signifique oculto siempre. */
+  [hidden] {
+    display: none !important;
+  }
+
+  input,
+  button,
+  textarea,
+  select {
+    font: inherit;
+    color: inherit;
+  }
+
+  p,
+  h1,
+  h2,
+  h3,
+  h4 {
+    overflow-wrap: break-word;
+  }
+
+  /* Los titulares no heredan el grosor por defecto del navegador.
+     CIFRA solo usa 400 y 500: nunca el 700 que trae el user agent. */
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-weight: 500;
+    text-wrap: balance;
+  }
+
+  /* Reduce huérfanas en prosa larga. */
+  p {
+    text-wrap: pretty;
+  }
+}
+
+/* =========================================================================
+   BASE — elementos sin clase
+   ========================================================================= */
+@layer base {
+  body {
+    background: var(--canvas);
+    color: var(--ink);
+    font-family: var(--font-sans);
+    font-size: 17px;
+    line-height: 1.65;
+    font-weight: 400;
+  }
+
+  /* Toda cifra alinea por columnas. Ver §8 para el porqué de las dos
+     declaraciones. */
+  .mono,
+  code,
+  kbd,
+  samp {
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: 'tnum' 1;
+  }
+
+  a {
+    color: inherit;
+    text-decoration-color: var(--olive-700);
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.25em;
+  }
+
+  /* :focus-visible, no :focus. La diferencia está en §7 del doc 21. */
+  :focus-visible {
+    outline: 2px solid var(--olive-700);
+    outline-offset: 3px;
+  }
+
+  ::selection {
+    background: var(--olive-100);
+    color: var(--ink);
+  }
+}
+@layer base {
+  /* El scroll suave solo para quien no ha pedido lo contrario.
+     Un salto de anclaje animado es de los peores desencadenantes. */
+  @media (prefers-reduced-motion: no-preference) {
+    html {
+      scroll-behavior: smooth;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+/* =========================================================================
+   LAYOUT — la rejilla a sangre y la retícula de hairlines
+   ========================================================================= */
+@layer layout {
+  /* Rejilla de página: columnas nombradas para que cada hijo elija si
+     ocupa el ancho de contenido o el ancho completo de la ventana.
+     Trabaja sobre el ancho REAL del contenedor, así que no sufre el bug
+     de 100vw (que incluye la barra de scroll y provoca scroll horizontal
+     en Windows). */
+  .page {
+    display: grid;
+    grid-template-columns:
+      [full-start] minmax(var(--gutter), 1fr)
+      [content-start] min(var(--container), 100% - (var(--gutter) * 2))
+      [content-end]
+      minmax(var(--gutter), 1fr) [full-end];
+  }
+
+  .page > * {
+    grid-column: content;
+  }
+
+  .page > .full {
+    grid-column: full;
+  }
+
+  /* --- Bandas ----------------------------------------------------------
+     Aquí vivían dos hairlines verticales que atravesaban todas las
+     secciones. Se eliminaron a propósito: los separadores con reglas son
+     parte de la huella de la línea estética "editorial-typographic", que
+     está saturada y se lee como plantilla generada.
+
+     Su trabajo estructural lo asumen ahora la fotografía a sangre, las
+     rejillas asimétricas y el ritmo de fondos. No las devuelvas sin
+     quitar antes alguna de esas tres. */
+  .band {
+    position: relative;
+  }
+
+  .band--ink {
+    background: var(--brand-900);
+    color: var(--on-ink-primary);
+  }
+
+  .band--surface {
+    background: var(--surface);
+  }
+
+  .band--sunken {
+    background: var(--surface-sunken);
+  }
+
+  /* Contenido centrado dentro de una banda a sangre. */
+  .inner {
+    max-width: var(--container);
+    margin-inline: auto;
+    padding-inline: var(--gutter);
+  }
+
+  /* Ritmo vertical de sección. El §03 lo dobla con .section--tall. */
+  .section {
+    padding-block: clamp(80px, 11vw, 140px);
+  }
+
+  /* El §03 es la sección más importante y lleva más aire que el resto,
+     pero no tanto como para que el contenido flote en un vacío. */
+  .section--tall {
+    padding-block: clamp(104px, 14vw, 180px);
+  }
+
+  .section--compact {
+    padding-block: clamp(48px, 6vw, 72px);
+  }
+}
+
+/* =========================================================================
+   COMPONENTS — piezas reutilizables
+   ========================================================================= */
+@layer components {
+  /* --- Botones --------------------------------------------------------- */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 46px;
+    padding-inline: 24px;
+    border: 1px solid transparent;
+    border-radius: var(--radius);
+    font-size: 15px;
+    font-weight: 500;
+    text-decoration: none;
+    cursor: pointer;
+    /* Explícito, nunca `all`: con `all` cualquier propiedad que cambie
+       en otro estado entra en la transición sin que lo pidas. */
+    transition:
+      background-color var(--dur-hover) var(--ease-out),
+      border-color var(--dur-hover) var(--ease-out),
+      color var(--dur-hover) var(--ease-out),
+      scale var(--dur-press) var(--ease-out);
+  }
+
+  .btn--sm {
+    min-height: 38px;
+    padding-inline: 16px;
+    font-size: 14px;
+  }
+
+  /* Sobre fondo oscuro.
+     Estos dos valores NO pueden depender del tema. Las bandas --brand-900
+     son a sangre y NO cambian en modo oscuro (lo dice el spec), así que un
+     botón encima tampoco puede cambiar. Con var(--canvas) el fondo del
+     botón se volvía #191815 en oscuro, contra un texto --brand-900 también
+     oscuro: invisible. --on-ink-primary y --brand-900 no se redefinen. */
+  .btn--primary {
+    background: var(--on-ink-primary);
+    color: var(--brand-900);
+  }
+
+  .btn--secondary {
+    background: transparent;
+    color: var(--on-ink-primary);
+    border-color: var(--on-ink-border);
+  }
+
+  /* Sobre papel */
+  .btn--ink {
+    background: var(--brand-600);
+    color: #fff;
+  }
+
+  /* En oscuro --brand-600 se aclara a #5B94CE para seguir siendo visible
+     sobre el fondo, y entonces el texto blanco cae a 3.2:1 — falla AA.
+     Con el azul tinta encima da 5.1:1. */
+  @media (prefers-color-scheme: dark) {
+    .btn--ink {
+      color: var(--brand-900);
+    }
+  }
+
+  .btn--ghost {
+    background: transparent;
+    color: var(--ink);
+    border-color: var(--line-strong);
+  }
+
+  /* El hover queda QUIETO: solo cambia el fondo. El movimiento en hover
+     es el delator número uno de una interfaz generada. */
+  @media (hover: hover) and (pointer: fine) {
+    .btn--primary:hover {
+      background: #fff;
+    }
+    .btn--secondary:hover {
+      background: rgb(247 246 243 / 0.08);
+      border-color: rgb(247 246 243 / 0.45);
+    }
+    .btn--ink:hover {
+      background: var(--brand-700);
+    }
+    .btn--ghost:hover {
+      background: var(--surface-sunken);
+      border-color: var(--ink);
+    }
+  }
+
+  /* La presión SÍ se mueve. No se ve tanto como se siente, y en táctil
+     es la única señal de que el toque se registró. */
+  .btn:active {
+    scale: 0.97;
+  }
+
+  /* Los marcadores mono sobre cada encabezado se eliminaron. El eyebrow
+     en mayúsculas repetido como gramática de sección es una prohibición
+     absoluta de impeccable: se lee como andamiaje, no como sistema.
+     El titular carga solo. */
+
+  /* --- La regla oliva: el gesto de marca -------------------------------- */
+  .rule-olive {
+    width: 120px;
+    height: 3px;
+    border: 0;
+    background: var(--olive-700);
+    margin-block: 28px;
+    margin-inline: 0;
+  }
+
+  .band--ink .rule-olive {
+    background: var(--olive-400);
+  }
+
+  /* --- Titulares de sección -------------------------------------------- */
+  .h2 {
+    font-size: clamp(30px, 4.2vw, 52px);
+    line-height: 1.08;
+    letter-spacing: -0.025em;
+    font-weight: 500;
+    max-width: 20ch;
+  }
+
+  .h3 {
+    font-size: 20px;
+    line-height: 1.3;
+    font-weight: 500;
+  }
+
+  .lede {
+    font-size: 17px;
+    line-height: 1.65;
+    color: var(--text-secondary);
+    max-width: 56ch;
+  }
+
+  /* El texto claro sobre oscuro se percibe más ligero y necesita más
+     aire entre líneas. */
+  .band--ink .lede {
+    color: var(--on-ink-secondary);
+    line-height: 1.72;
+  }
+
+  /* --- Chips de estado --------------------------------------------------
+     El color nunca va solo: siempre lleva icono y texto, para que no
+     dependa de distinguir tonos. */
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 3px 9px;
+    border: 1px solid currentColor;
+    border-radius: 999px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.04em;
+    white-space: nowrap;
+  }
+
+  .chip--ok {
+    color: var(--state-ok);
+  }
+  .chip--agent {
+    color: var(--agent-600);
+  }
+
+  .chip svg {
+    width: 11px;
+    height: 11px;
+    flex: none;
+  }
+
+  /* --- Cifras ----------------------------------------------------------- */
+  .figure-xl {
+    font-family: var(--font-mono);
+    font-size: clamp(36px, 6vw, 72px);
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: 'tnum' 1;
+    line-height: 1;
+    /* Los montos NUNCA llevan color. */
+    color: var(--ink);
+  }
+
+  .band--ink .figure-xl {
+    color: var(--on-ink-primary);
+  }
+
+  /* --- Revelado al entrar en viewport -----------------------------------
+     Sin cascada entre hijos: el escalonado por delay es la marca
+     inconfundible de una landing generada. La sección entra entera.
+
+     El que se mueve es el CONTENIDO, nunca la sección. Si trasladas la
+     sección, su fondo se va con ella y aparece una franja del color del
+     body entre banda y banda; y si le bajas la opacidad, el fondo a
+     sangre también se desvanece. Las bandas siempre sólidas y a tope. */
+  .reveal > .inner {
+    opacity: 0;
+    translate: 0 8px;
+    transition:
+      opacity var(--dur-reveal) var(--ease-out),
+      translate var(--dur-reveal) var(--ease-out);
+  }
+
+  .reveal.is-in > .inner {
+    opacity: 1;
+    translate: 0 0;
+  }
+
+  /* Movimiento reducido: se conserva el contenido, se elimina el
+     desplazamiento. No es "sin movimiento", es sin transformaciones. */
+  @media (prefers-reduced-motion: reduce) {
+    .reveal > .inner {
+      opacity: 1;
+      translate: none;
+      transition: none;
+    }
+  }
+
+  /* --- Fotografía ------------------------------------------------------
+     Un solo tratamiento para todas las imágenes del sitio. Es lo que las
+     convierte en sistema en vez de en colección: el gris uniforme y el
+     mismo contraste hacen que ocho fotos de origen distinto se lean como
+     una sola dirección de arte. */
+  .photo {
+    position: relative;
+    overflow: hidden;
+    background: var(--surface-sunken);
+    /* Red de seguridad: ninguna fotografía puede pasar de una pantalla.
+       Una proporción mal puesta calcula el alto a partir del ANCHO, así que
+       una columna ancha con un ratio vertical produce imágenes de varias
+       pantallas sin que nada avise. Con el tope, el marco se recorta y la
+       imagen sigue encajando por object-fit. */
+    max-height: 92svh;
+    /* El marco se revela con un barrido, no con un fundido. Un fade es
+       el recurso por defecto; un wipe se siente compuesto. */
+    clip-path: inset(100% 0 0 0);
+    transition: clip-path 620ms var(--ease-out);
+  }
+
+  .reveal.is-in .photo,
+  .photo.is-in {
+    clip-path: inset(0 0 0 0);
+  }
+
+  .photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: grayscale(1) contrast(1.08);
+    /* Entra ligeramente ampliada y se asienta. Solo transform: se compone
+       en GPU y no provoca reflow. No es parallax de scroll. */
+    scale: 1.06;
+    transition:
+      scale 1200ms var(--ease-out),
+      filter 400ms var(--ease-out);
+  }
+
+  .reveal.is-in .photo img,
+  .photo.is-in img {
+    scale: 1;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .photo:hover img {
+      filter: grayscale(0.82) contrast(1.1);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .photo {
+      clip-path: none;
+      transition: none;
+    }
+    .photo img {
+      scale: 1;
+      transition: none;
+    }
+  }
+
+  /* --- Prosa: documentos largos ----------------------------------------
+     La landing no tenía estilos de texto corrido porque no había ninguno:
+     todo eran titulares, cifras y listas cortas. Un documento legal es otra
+     cosa y necesita su propia medida.
+
+     La medida de línea se fija en ch. OJO: `ch` es el ancho del carácter
+     «0», que en Geist es bastante más ancho que la media de una minúscula.
+     Medido en pantalla, 68ch daban 90 caracteres reales por línea — muy por
+     encima del límite cómodo. 54ch da unos 70, que es el techo razonable:
+     por debajo de 45 el ojo salta de renglón, por encima de 75 se pierde al
+     volver al margen. */
+  .prose {
+    max-width: 54ch;
+    font-size: 16px;
+    line-height: 1.75;
+    color: var(--text-secondary);
+  }
+
+  .prose h2 {
+    margin-block: 2.4em 0.7em;
+    font-size: 22px;
+    line-height: 1.3;
+    letter-spacing: -0.015em;
+    color: var(--ink);
+    /* scroll-margin evita que el header fijo tape el encabezado al llegar
+       por un ancla. Sin esto, /legal/terminos#retracto deja el título
+       escondido detrás de la barra. */
+    scroll-margin-block-start: 88px;
+  }
+
+  .prose h2:first-child {
+    margin-block-start: 0;
+  }
+
+  .prose h3 {
+    margin-block: 1.8em 0.5em;
+    font-size: 17px;
+    line-height: 1.4;
+    color: var(--ink);
+    scroll-margin-block-start: 88px;
+  }
+
+  .prose p {
+    margin-block-end: 1.1em;
+  }
+
+  .prose > :last-child {
+    margin-block-end: 0;
+  }
+
+  .prose ul,
+  .prose ol {
+    margin-block-end: 1.1em;
+    padding-inline-start: 0;
+    list-style: none;
+    display: grid;
+    gap: 0.55em;
+  }
+
+  /* La viñeta va POSICIONADA, no en una columna de grid.
+     Con `display: grid` en el <li>, cualquier <strong> o <a> del texto se
+     convierte en celda del grid y se coloca en su propia columna: el
+     párrafo se parte y se desalinea. Un <li> tiene que seguir siendo un
+     bloque de texto normal para que lo de dentro fluya en línea. */
+  .prose li {
+    position: relative;
+    padding-inline-start: 1.6em;
+  }
+
+  .prose ul > li::before {
+    content: '—';
+    position: absolute;
+    inset-inline-start: 0;
+    color: var(--olive-700);
+  }
+
+  .prose ol {
+    counter-reset: item;
+  }
+
+  .prose ol > li {
+    counter-increment: item;
+    padding-inline-start: 2em;
+  }
+
+  .prose ol > li::before {
+    content: counter(item) '.';
+    position: absolute;
+    inset-inline-start: 0;
+    font-family: var(--font-mono);
+    font-size: 0.85em;
+    font-variant-numeric: tabular-nums;
+    color: var(--olive-700);
+  }
+
+  .prose strong {
+    font-weight: 500;
+    color: var(--ink);
+  }
+
+  .prose a {
+    color: var(--ink);
+    text-decoration: underline;
+    text-decoration-color: var(--olive-700);
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.25em;
+  }
+
+  /* Cita de norma: se distingue del cuerpo sin gritar. */
+  .prose .norma {
+    font-family: var(--font-mono);
+    font-size: 0.82em;
+    color: var(--text-secondary);
+  }
+
+  /* Bloque de datos del responsable y avisos destacados. */
+  .prose .bloque {
+    margin-block: 1.6em;
+    padding: 20px 22px;
+    background: var(--surface-sunken);
+    border-radius: var(--radius-card);
+    font-size: 15px;
+  }
+
+  .prose .bloque p:last-child {
+    margin-block-end: 0;
+  }
+
+  /* Marcador de dato pendiente. Deliberadamente llamativo: si alguien
+     publica el documento sin rellenarlo, tiene que verse a la primera. */
+  /* Sin `white-space: nowrap`: un marcador largo como
+     [PROVEEDOR DE AGREGACIÓN] en monoespaciada no cabe en 320px, y al no
+     poder partirse empujaba la página entera fuera del viewport.
+     `overflow-wrap: anywhere` deja que el texto se parta DENTRO de la caja
+     en vez de que la caja desborde. */
+  .prose .pendiente {
+    display: inline;
+    font-family: var(--font-mono);
+    font-size: 0.85em;
+    padding: 1px 6px;
+    border: 1px dashed var(--state-bad);
+    border-radius: 4px;
+    color: var(--state-bad);
+    overflow-wrap: anywhere;
+  }
+
+  /* Las tablas son el único elemento al que se le permite ser más ancho
+     que la medida de lectura — pero entonces necesita SU PROPIO scroll,
+     no el de la página. Sin este contenedor, una tabla de tres columnas
+     desborda el documento entero por debajo de 400px. */
+  .prose .tabla {
+    overflow-x: auto;
+    margin-block-end: 1.4em;
+    /* Sombra sutil en el borde derecho mientras quede algo por desplazar:
+       sin ella, en móvil nadie descubre que la tabla continúa. */
+    background:
+      linear-gradient(to right, var(--surface-sunken) 30%, transparent),
+      linear-gradient(to left, var(--surface-sunken) 30%, transparent) 100% 0;
+    background-size: 24px 100%;
+    background-repeat: no-repeat;
+    background-attachment: local, local;
+  }
+
+  .prose table {
+    width: 100%;
+    min-width: 28rem;
+    border-collapse: collapse;
+    font-size: 15px;
+  }
+
+  .prose .tabla table {
+    margin-block-end: 0;
+  }
+
+  .prose th,
+  .prose td {
+    text-align: start;
+    padding: 11px 12px 11px 0;
+    border-block-end: 1px solid var(--line);
+    vertical-align: top;
+  }
+
+  .prose th {
+    font-weight: 500;
+    color: var(--ink);
+  }
+
+  /* --- Tarjetas --------------------------------------------------------
+     Se usan SOLO donde son la forma correcta: elementos paralelos e
+     independientes que se comparan entre sí. Nunca como contenedor por
+     defecto, y nunca con un icono en círculo pastel arriba. */
+  .card {
+    display: flex;
+    flex-direction: column;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-card);
+    overflow: hidden;
+  }
+
+  /* La proporción la fija cada uso con la prop `ratio`, según la
+     orientación nativa del archivo. Aquí solo el mínimo. */
+  .card__media {
+    flex: none;
+  }
+
+  .card__body {
+    padding: 26px 24px 30px;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+  }
+
+  /* Escalonado dentro de UNA composición (el mosaico, las tarjetas de
+     roles). Es distinto de escalonar secciones enteras: aquí las piezas
+     pertenecen a la misma unidad y verlas llegar en orden se lee como
+     composición, no como andamiaje. */
+  @media (prefers-reduced-motion: no-preference) {
+    .reveal .photo {
+      transition-delay: calc(var(--i, 0) * 120ms);
+    }
+  }
+
+  /* =====================================================================
+     MOVIMIENTO DIRIGIDO POR SCROLL
+     =====================================================================
+     Mejora progresiva, nunca la base. `animation-timeline` está en ~84% de
+     navegadores pero Firefox estable aún lo tiene tras un flag, así que NO
+     es Baseline. Quien no lo soporte se queda con el revelado por
+     IntersectionObserver de arriba, que es completo y suficiente.
+
+     Dentro del @supports se anulan las transiciones del revelado para que
+     los dos sistemas no se peleen por las mismas propiedades. */
+  @supports (animation-timeline: view()) {
+    @media (prefers-reduced-motion: no-preference) {
+      /* NUNCA el atajo `animation` aquí.
+         El minificador fusiona `animation: X linear both` con
+         `animation-timeline: view()` en `animation: linear both X view()`,
+         que es sintaxis inválida — el atajo no acepta la línea de tiempo y
+         además la resetea a `auto`. El navegador descarta la regla entera y
+         la animación no ocurre, en silencio.
+         Con propiedades largas no hay atajo que fusionar. */
+
+      /* --- Fotografía: se descubre y se asienta --------------------- */
+      .photo {
+        clip-path: none;
+        transition: none;
+        animation-name: photo-reveal;
+        animation-duration: 1ms;
+        animation-timing-function: linear;
+        animation-fill-mode: both;
+        /* Empieza cuando asoma por abajo y termina antes del centro:
+           la imagen está entera bastante antes de que se lea. */
+        animation-range: entry 5% cover 34%;
+        animation-timeline: view();
+      }
+
+      .photo img {
+        transition: filter 400ms var(--ease-out);
+        animation-name: photo-settle;
+        animation-duration: 1ms;
+        animation-timing-function: linear;
+        animation-fill-mode: both;
+        animation-range: entry 0% cover 52%;
+        animation-timeline: view();
+      }
+
+      /* El escalonado del mosaico no aplica aquí: con timeline de scroll
+         cada pieza ya entra a su propio ritmo según su posición. */
+      .reveal .photo {
+        transition-delay: 0s;
+      }
+
+      /* --- Contenido de sección ------------------------------------- */
+      .reveal > .inner {
+        opacity: 1;
+        translate: none;
+        transition: none;
+        animation-name: section-in;
+        animation-duration: 1ms;
+        animation-timing-function: linear;
+        animation-fill-mode: both;
+        animation-range: entry 8% cover 26%;
+        animation-timeline: view();
+      }
+    }
+  }
+
+  @keyframes photo-reveal {
+    from {
+      clip-path: inset(46% 0 0 0);
+    }
+    to {
+      clip-path: inset(0 0 0 0);
+    }
+  }
+
+  /* La foto entra ampliada y se asienta. Solo `scale`, que se compone en
+     GPU: ni reflow ni repintado de layout. No es parallax de scroll. */
+  @keyframes photo-settle {
+    from {
+      scale: 1.12;
+    }
+    to {
+      scale: 1;
+    }
+  }
+
+  @keyframes section-in {
+    from {
+      opacity: 0;
+      translate: 0 14px;
+    }
+    to {
+      opacity: 1;
+      translate: 0 0;
+    }
+  }
+}

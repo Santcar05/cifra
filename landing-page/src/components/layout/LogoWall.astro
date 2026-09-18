@@ -1,0 +1,171 @@
+---
+/**
+ * Muro de rieles.
+ *
+ * El problema real de un muro de logotipos no es maquetarlo: es que catorce
+ * marcas llegan con pesos, colores y márgenes distintos y, puestas tal cual,
+ * se pelean entre sí. Aquí se igualan de tres maneras:
+ *
+ *   1. Un solo gris. Los mapas de bits pasan por `grayscale(1)` más un
+ *      ajuste de brillo/contraste; los vectores heredan currentColor.
+ *   2. Caja óptica, no altura fija. Cada logotipo se ajusta DENTRO de una
+ *      caja con alto y ancho máximos. Forzar la misma altura a todos haría
+ *      que un logotipo alargado pareciera enorme al lado de uno compacto.
+ *   3. `scale` por marca para las correcciones que el ojo pide y la
+ *      aritmética no.
+ */
+import { Image } from 'astro:assets';
+import { rails } from '@/data/rails';
+---
+
+<section class="full band band--sunken logos reveal" aria-labelledby="logos-h">
+  <div class="inner">
+    <h2 id="logos-h" class="logos__title">
+      El dinero entra por donde ya te pagan.
+    </h2>
+
+    <ul class="logos__grid">
+      {rails.map((r) => (
+        <li class="logos__item">
+          <span
+            class="logos__box"
+            style={r.scale ? `--scale:${r.scale}` : undefined}
+          >
+            {r.image ? (
+              <Image
+                src={r.image}
+                alt={r.name}
+                widths={[120, 240]}
+                sizes="120px"
+                densities={undefined}
+              />
+            ) : (
+              <svg
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                role="img"
+                aria-label={r.name}
+                set:html={r.svg}
+              />
+            )}
+          </span>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .logos {
+    padding-block: clamp(52px, 6vw, 84px);
+  }
+
+  .logos__title {
+    font-size: clamp(18px, 2vw, 22px);
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    color: var(--text-secondary);
+    margin-block-end: clamp(32px, 3.6vw, 48px);
+    max-width: 30ch;
+  }
+
+  /* Siete columnas fijas: son 14 rieles, así que salen dos filas
+     exactas. Con auto-fit quedaban 6+6+2 y la última fila coja se lee
+     como descuido. Aquí la aritmética es parte del diseño. */
+  .logos__grid {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: clamp(30px, 3.4vw, 48px) clamp(16px, 2vw, 32px);
+    align-items: center;
+    justify-items: center;
+  }
+
+  @media (width < 68rem) {
+    .logos__grid {
+      grid-template-columns: repeat(5, 1fr);
+    }
+  }
+
+  @media (width < 48rem) {
+    .logos__grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  @media (width < 30rem) {
+    .logos__grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  /* La caja óptica: el logotipo se ajusta dentro, no la llena. */
+  .logos__box {
+    --scale: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 128px;
+    height: 52px;
+  }
+
+  /* Los límites van en PÍXELES, no en porcentaje.
+     `height: 100%` dentro de un área de grid no siempre resuelve contra la
+     altura del área, y cuando no resuelve gana el atributo `height` que
+     emite <Image> — que para estos archivos es el tamaño intrínseco. El
+     resultado era un logotipo de 120px dentro de una caja de 44px,
+     desbordándose sobre las filas vecinas.
+     Con max-height absoluto y height:auto la imagen escala proporcional y
+     cabe siempre, sin depender de object-fit. */
+  .logos__box :global(img) {
+    display: block;
+    width: auto;
+    height: auto;
+    max-width: calc(120px * var(--scale));
+    max-height: calc(40px * var(--scale));
+    filter: grayscale(1);
+    opacity: 0.72;
+    transition:
+      filter 300ms var(--ease-out),
+      opacity 300ms var(--ease-out);
+  }
+
+  .logos__box svg {
+    display: block;
+    width: auto;
+    height: calc(26px * var(--scale));
+    max-width: calc(120px * var(--scale));
+    color: var(--text-secondary);
+    opacity: 0.9;
+    transition: opacity 300ms var(--ease-out);
+  }
+
+  /* Al pasar el cursor, el logotipo recupera presencia. Es la única
+     recompensa de la sección y no mueve nada de sitio. */
+  @media (hover: hover) and (pointer: fine) {
+    .logos__item:hover :global(img) {
+      filter: grayscale(1);
+      opacity: 1;
+    }
+    .logos__item:hover svg {
+      color: var(--ink);
+      opacity: 1;
+    }
+  }
+
+  /* En oscuro los logotipos son casi todos oscuros sobre transparente, así
+     que hay que INVERTIRLOS para que se vean. invert(1) tras grayscale(1)
+     convierte negro en blanco conservando la forma. */
+  @media (prefers-color-scheme: dark) {
+    .logos__box :global(img) {
+      filter: grayscale(1) invert(1);
+      opacity: 0.68;
+    }
+    .logos__item:hover :global(img) {
+      filter: grayscale(1) invert(1);
+      opacity: 1;
+    }
+  }
+</style>

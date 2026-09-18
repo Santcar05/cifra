@@ -1,0 +1,186 @@
+---
+/**
+ * §05 — El apartado.
+ *
+ * SEGUNDO MOMENTO A SANGRE de la página: la fotografía ocupa todo el ancho
+ * de la ventana y el contenido va encima. Es el contraste con las secciones
+ * contenidas lo que hace que este golpee — si todas fueran así, ninguna
+ * destacaría.
+ *
+ * El texto sobre fotografía es donde más fácil se falla el contraste, así
+ * que la imagen lleva un velo de azul tinta calculado para que la cifra y
+ * el cuerpo pasen AA con margen, no por los pelos.
+ *
+ * La cifra cuenta desde cero al entrar en viewport. Funciona porque va en
+ * mono con tabular-nums: sin eso el ancho cambiaría en cada frame.
+ */
+import Photo from '@components/ui/Photo.astro';
+import archivoSellado from '@/assets/fotos/archivo-sellado.jpg';
+
+const breakdown = [
+  { label: 'Renta', value: '412.000' },
+  { label: 'IVA', value: '0' },
+  { label: 'PILA', value: '308.000' },
+];
+---
+
+<section id="apartado" class="full band band--ink apartado reveal" aria-labelledby="apartado-h">
+  <Photo
+    class="apartado__bg"
+    src={archivoSellado}
+    alt=""
+    sizes="100vw"
+    widths={[900, 1400, 2000]}
+  />
+
+  <div class="inner apartado__grid">
+    <div class="apartado__figure-col">
+      <p class="apartado__figure figure-xl" data-count-to="720000" data-count-prefix="$">
+        $720.000
+      </p>
+
+      <hr class="rule-olive apartado__rule" />
+
+      <p class="apartado__caption">Ya apartado para tus impuestos este mes</p>
+
+      <dl class="apartado__breakdown">
+        {breakdown.map((b) => (
+          <div class="apartado__line">
+            <dt>{b.label}</dt>
+            <dd>{b.value}</dd>
+          </div>
+        ))}
+      </dl>
+    </div>
+
+    <div class="apartado__copy">
+      <h2 id="apartado-h" class="h2">
+        El saldo que ves ya tiene los impuestos descontados.
+      </h2>
+
+      <p class="lede apartado__lede">
+        La mayoría de los sustos de fin de año no vienen de ganar poco: vienen
+        de haber gastado plata que nunca fue tuya. CIFRA calcula la porción
+        que le corresponde a la DIAN en el momento en que entra cada pago y la
+        aparta antes de que la veas como disponible.
+      </p>
+
+      <p class="lede apartado__lede">
+        Por eso el número que dice <em>disponible</em> es de verdad tuyo.
+      </p>
+    </div>
+  </div>
+</section>
+
+<style>
+  .apartado {
+    position: relative;
+    isolation: isolate;
+    padding-block: clamp(96px, 12vw, 172px);
+    overflow: clip;
+  }
+
+  /* La fotografía ocupa toda la sección, detrás del contenido.
+     max-height: none anula la red de seguridad global de .photo: aquí el
+     marco NO es una imagen en el flujo, es un fondo que tiene que cubrir
+     toda la sección. Con el tope puesto, una sección más alta que la
+     pantalla dejaría una franja sin fondo abajo. */
+  :global(.apartado__bg) {
+    position: absolute;
+    inset: 0;
+    max-height: none;
+    z-index: -2;
+  }
+
+  :global(.apartado__bg img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* El velo. Sin él, el texto sobre la foto no pasa AA en las zonas
+     claras de la imagen — y las zonas claras se mueven con el recorte,
+     así que no basta con "colocar el texto donde está oscuro". */
+  .apartado::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: linear-gradient(
+      100deg,
+      rgb(10 26 47 / 0.94) 0%,
+      rgb(10 26 47 / 0.88) 46%,
+      rgb(10 26 47 / 0.78) 100%
+    );
+  }
+
+  .apartado__grid {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 44fr) minmax(0, 56fr);
+    gap: clamp(40px, 6vw, 88px);
+    align-items: center;
+  }
+
+  .apartado__rule {
+    margin-block: 24px 20px;
+  }
+
+  .apartado__caption {
+    font-size: 14px;
+    color: var(--on-ink-secondary);
+  }
+
+  .apartado__breakdown {
+    margin: 28px 0 0;
+    display: grid;
+    max-width: 300px;
+  }
+
+  .apartado__line {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    padding-block: 11px;
+    border-block-end: 1px solid var(--on-ink-line);
+    font-family: var(--font-mono);
+    font-size: 14px;
+  }
+
+  .apartado__line:last-child {
+    border-block-end: 0;
+  }
+
+  .apartado__line dt {
+    color: var(--on-ink-secondary);
+  }
+
+  .apartado__line dd {
+    margin: 0;
+    color: var(--on-ink-primary);
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: 'tnum' 1;
+  }
+
+  .apartado__lede + .apartado__lede {
+    margin-block-start: 18px;
+  }
+
+  .apartado__lede em {
+    font-style: normal;
+    text-decoration: underline;
+    text-decoration-color: var(--olive-400);
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.25em;
+  }
+
+  @media (width < 60rem) {
+    .apartado__grid {
+      grid-template-columns: 1fr;
+    }
+
+    .apartado::before {
+      background: rgb(10 26 47 / 0.92);
+    }
+  }
+</style>

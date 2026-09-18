@@ -1,0 +1,155 @@
+---
+/**
+ * §04 — Los tres roles.
+ *
+ * Aquí las tarjetas SÍ son la forma correcta: tres elementos paralelos e
+ * independientes que el lector compara entre sí. Lo que está prohibido es
+ * "tres tarjetas idénticas con un icono en círculo pastel arriba" — estas
+ * llevan fotografía distinta, sin iconos y sin círculos, y cada una dice
+ * algo diferente.
+ *
+ * Las viñetas son guiones em. Ni bullets ni iconos.
+ */
+import Photo from '@components/ui/Photo.astro';
+
+import archivadores from '@/assets/fotos/archivadores.jpg';
+import expedientes from '@/assets/fotos/expedientes.jpg';
+import comanda from '@/assets/fotos/comanda.jpg';
+
+/**
+ * El `id` de cada tarjeta es el destino de los enlaces del nav
+ * (#empresas, #contadores) y de la columna «Para quién» del pie. Sin ellos,
+ * esos enlaces no llevaban a ningún sitio y los tres del pie apuntaban al
+ * mismo lugar.
+ */
+const roles = [
+  {
+    id: 'independientes',
+    photo: comanda,
+    alt: 'Comanda impresa en papel térmico: el comprobante suelto que hay que convertir en factura.',
+    title: 'Si eres independiente',
+    items: [
+      'Facturas en dos minutos y con CUFE válido.',
+      'Sabes cuánto de lo que ves en el banco es tuyo.',
+      'Los impuestos quedan apartados el mismo día que cobras.',
+      'Llegas a la declaración con todo ya cuadrado.',
+    ],
+  },
+  {
+    id: 'empresas',
+    photo: expedientes,
+    alt: 'Pila de expedientes en carpetas de cartón: treinta cuentas de cobro en treinta formatos.',
+    title: 'Si contratas independientes',
+    items: [
+      'Recibes cuentas de cobro en un solo formato.',
+      'La retención se calcula sola y no genera sanción.',
+      'Los soportes quedan asociados a cada factura.',
+      'Cierras el mes sin perseguir documentos por WhatsApp.',
+    ],
+  },
+  {
+    id: 'contadores',
+    photo: archivadores,
+    alt: 'Archivadores metálicos numerados: cuarenta clientes en cuarenta cajones distintos.',
+    title: 'Si eres contador',
+    items: [
+      'Una sola pantalla para todos tus clientes.',
+      'Ves al instante a quién le falta qué.',
+      'Cada decisión del agente queda auditada y es reversible.',
+      'Tú firmas; CIFRA prepara lo que firmas.',
+    ],
+  },
+];
+---
+
+<section id="roles" class="full band section reveal" aria-labelledby="roles-h">
+  <div class="inner">
+    <h2 id="roles-h" class="h2 roles__title">
+      El mismo pago, tres problemas distintos.
+    </h2>
+
+    <div class="roles">
+      {roles.map((r, i) => (
+        <article class="card rol" id={r.id}>
+          {/* Las tres son verticales de origen, así que la tarjeta usa una
+              proporción vertical: con 4:3 se recortaba más de la mitad. */}
+          <Photo
+            class="card__media"
+            src={r.photo}
+            alt={r.alt}
+            index={i}
+            ratio="4 / 5"
+            sizes="(max-width: 60rem) 100vw, 33vw"
+          />
+          <div class="card__body">
+            <h3 class="h3 rol__title">{r.title}</h3>
+            <ul class="rol__list">
+              {r.items.map((item) => (
+                <li class="rol__item">{item}</li>
+              ))}
+            </ul>
+          </div>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .roles__title {
+    margin-block-end: clamp(40px, 5vw, 68px);
+  }
+
+  .roles {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: clamp(18px, 2.2vw, 30px);
+  }
+
+  /* Sin esto, al llegar por #empresas o #contadores la cabecera fija de
+     64px tapa el borde superior de la tarjeta. Mismo problema que ya
+     resolví en los encabezados de .prose. */
+  .rol {
+    scroll-margin-block-start: 88px;
+  }
+
+  /* La regla oliva va DENTRO de la tarjeta, justo bajo la foto: mantiene
+     el gesto de marca sin añadir un separador más a la página. */
+  .rol__title {
+    padding-block-start: 18px;
+    border-block-start: 2px solid var(--olive-700);
+    margin-block-end: 16px;
+  }
+
+  .rol__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 11px;
+  }
+
+  .rol__item {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 10px;
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--text-secondary);
+  }
+
+  .rol__item::before {
+    content: '—';
+    color: var(--olive-700);
+  }
+
+  @media (width < 60rem) {
+    .roles {
+      grid-template-columns: 1fr;
+      gap: 24px;
+    }
+    .card__media {
+      aspect-ratio: 16 / 9;
+    }
+  }
+</style>

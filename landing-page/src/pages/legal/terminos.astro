@@ -1,0 +1,470 @@
+---
+/**
+ * ⚠️ DOCUMENTO NO REVISADO POR ABOGADO ⚠️
+ *
+ * NO PUBLICAR con bloques <span class="pendiente"> sin rellenar. El NIT y
+ * la dirección de notificación judicial los EXIGE la Ley 1480 de 2011
+ * art. 50 para servicios prestados por medios electrónicos, y hoy no
+ * existen: CIFRA no tiene sociedad constituida.
+ *
+ * REGLA DE REDACCIÓN: describe solo lo que CIFRA hace HOY. Lo que aún no
+ * existe va en condicional y marcado.
+ *
+ * COHERENCIA — las afirmaciones públicas que este texto NO puede
+ * contradecir, y las dos trampas:
+ *   · "La IA propone, tú apruebas, siempre en ese orden" convive con "gana
+ *     autonomía" SOLO si se precisa que la autonomía cambia QUÉ TAREAS
+ *     requieren aprobación, nunca la capacidad de mover dinero — que no
+ *     existe en ningún nivel porque el permiso bancario es de solo lectura.
+ *   · "Apartar impuestos" suena a mover fondos y chocaría con "no
+ *     custodiamos". Hay que decir que apartar es un CÁLCULO CONTABLE.
+ */
+import LegalLayout from '@/layouts/LegalLayout.astro';
+
+const secciones = [
+  { id: 'prestador', titulo: 'Quién presta el servicio' },
+  { id: 'aceptacion', titulo: 'Aceptación de estos términos' },
+  { id: 'estado', titulo: 'Estado actual del servicio' },
+  { id: 'objeto', titulo: 'Qué hace CIFRA' },
+  { id: 'limites', titulo: 'Qué NO hace CIFRA' },
+  { id: 'cuenta', titulo: 'Tu cuenta' },
+  { id: 'conexion', titulo: 'Conexión de cuentas bancarias' },
+  { id: 'asistente', titulo: 'El asistente y la escalera de autonomía' },
+  { id: 'apartado', titulo: 'Qué significa apartar impuestos' },
+  { id: 'facturacion', titulo: 'Facturación electrónica' },
+  { id: 'tributario', titulo: 'Los cálculos no son asesoría tributaria' },
+  { id: 'precios', titulo: 'Precios y pagos' },
+  { id: 'retracto', titulo: 'Derecho de retracto' },
+  { id: 'reversion', titulo: 'Reversión del pago' },
+  { id: 'propiedad', titulo: 'Propiedad intelectual' },
+  { id: 'disponibilidad', titulo: 'Disponibilidad y responsabilidad' },
+  { id: 'terminacion', titulo: 'Suspensión y terminación' },
+  { id: 'cambios', titulo: 'Cambios en estos términos' },
+  { id: 'pqr', titulo: 'Peticiones, quejas y reclamos' },
+  { id: 'ley', titulo: 'Ley aplicable y jurisdicción' },
+  { id: 'vigencia', titulo: 'Vigencia' },
+];
+---
+
+<LegalLayout
+  title="Términos y Condiciones — CIFRA"
+  description="Las reglas del servicio de CIFRA: qué hace, qué no hace, cómo funciona la conexión de cuentas con permiso de solo lectura, el derecho de retracto y los límites de responsabilidad."
+  titulo="Términos y Condiciones"
+  sumario="Las reglas del servicio: qué hace CIFRA, qué no hace —que importa más— y qué puedes esperar de nosotros y nosotros de ti."
+  ruta="/legal/terminos"
+  secciones={secciones}
+>
+  <h2 id="prestador">1. Quién presta el servicio</h2>
+
+  <div class="bloque">
+    <p>
+      <strong>Prestador:</strong> <span class="pendiente">[NOMBRE COMPLETO / RAZÓN SOCIAL]</span><br />
+      <strong>NIT:</strong> <span class="pendiente">[NIT]</span><br />
+      <strong>Dirección de notificación judicial:</strong> <span class="pendiente">[DIRECCIÓN]</span><br />
+      <strong>Correo electrónico:</strong> <span class="pendiente">[CORREO]</span><br />
+      <strong>Teléfono:</strong> <span class="pendiente">[TELÉFONO]</span>
+    </p>
+  </div>
+
+  <p class="norma">
+    Estos datos son los que exige el artículo 50 de la Ley 1480 de 2011 para
+    servicios prestados por medios electrónicos.
+  </p>
+
+  <h2 id="aceptacion">2. Aceptación de estos términos</h2>
+
+  <p>
+    Al crear una cuenta en CIFRA aceptas estos términos. Si no estás de
+    acuerdo con alguno, no crees la cuenta: no hay forma de usar el servicio
+    aceptando solo una parte.
+  </p>
+
+  <p>
+    El tratamiento de tus datos personales se rige por la
+    <a href="/legal/privacidad">Política de Tratamiento de la Información</a>,
+    que forma parte de estos términos.
+  </p>
+
+  <h2 id="estado">3. Estado actual del servicio</h2>
+
+  <p>
+    <strong>CIFRA está en desarrollo y todavía no presta servicio.</strong> A
+    la fecha de estos términos no hay cuentas activas, no hay conexión con
+    ningún banco, no se emite ninguna factura y no se cobra nada. El
+    formulario de <a href="/empezar">/empezar</a> no está conectado a ningún
+    sistema y no almacena lo que escribas en él.
+  </p>
+
+  <p>
+    Las cláusulas que siguen describen cómo funcionará el servicio cuando
+    esté operativo, y están redactadas en condicional donde la función aún no
+    existe. Actualizaremos este documento antes de empezar a prestar servicio.
+  </p>
+
+  <h2 id="objeto">4. Qué hace CIFRA</h2>
+
+  <p>
+    CIFRA es una herramienta de software para trabajadores independientes en
+    Colombia. Su función es:
+  </p>
+
+  <ol>
+    <li>
+      <strong>Leer</strong> los movimientos de las cuentas bancarias y
+      pasarelas de pago que decidas conectar.
+    </li>
+    <li>
+      <strong>Conciliar</strong> esos movimientos con las facturas que hayas
+      emitido, identificando a qué factura corresponde cada pago recibido,
+      incluso cuando llega agrupado o con comisiones descontadas.
+    </li>
+    <li>
+      <strong>Emitir</strong> facturas electrónicas validadas por la DIAN, a
+      tu nombre y por tu instrucción.
+    </li>
+    <li>
+      <strong>Calcular</strong> la porción de tus ingresos que corresponde a
+      obligaciones tributarias y mostrártela como no disponible.
+    </li>
+    <li>
+      <strong>Documentar</strong> todo lo anterior para que llegues a tu
+      declaración con la información organizada.
+    </li>
+  </ol>
+
+  <h2 id="limites">5. Qué NO hace CIFRA</h2>
+
+  <p>
+    Esta sección importa más que la anterior, y por eso está aquí arriba y no
+    escondida al final.
+  </p>
+
+  <ul>
+    <li>
+      <strong>No custodiamos tu dinero.</strong> Tus fondos permanecen en tus
+      cuentas, en tu banco. CIFRA nunca los recibe, ni siquiera de paso.
+    </li>
+    <li>
+      <strong>No movemos dinero.</strong> No podemos: el permiso que pedimos a
+      tu entidad financiera es de <strong>solo lectura</strong> y no habilita
+      transferencias, pagos ni débitos de ningún tipo.
+    </li>
+    <li>
+      <strong>No somos una entidad financiera</strong> ni estamos vigilados
+      por la Superintendencia Financiera de Colombia. No captamos recursos del
+      público ni prestamos servicios de pago.
+    </li>
+    <li>
+      <strong>No sustituimos a tu contador.</strong> CIFRA prepara, calcula y
+      documenta. Quien revisa y firma tu declaración es un contador público,
+      y esa responsabilidad es suya y tuya.
+    </li>
+    <li>
+      <strong>No prestamos asesoría tributaria, contable ni legal.</strong>
+    </li>
+    <li>
+      <strong>No reportamos tu información a centrales de riesgo</strong> ni
+      evaluamos tu solvencia crediticia.
+    </li>
+    <li><strong>No vendemos tus datos.</strong></li>
+  </ul>
+
+  <h2 id="cuenta">6. Tu cuenta</h2>
+
+  <ul>
+    <li>
+      Para crear una cuenta basta un correo electrónico válido.
+      <strong>No pedimos tarjeta ni datos de facturación para empezar.</strong>
+    </li>
+    <li>
+      Debes ser mayor de edad y tener capacidad legal para contratar.
+    </li>
+    <li>
+      La información que registres debe ser veraz. Si es falsa o está
+      desactualizada, los resultados que produzca CIFRA lo estarán también.
+    </li>
+    <li>
+      Eres responsable de la confidencialidad de tus credenciales. Avísanos si
+      sospechas un acceso no autorizado.
+    </li>
+    <li>
+      Una cuenta corresponde a una persona o empresa. No la compartas.
+    </li>
+  </ul>
+
+  <h2 id="conexion">7. Conexión de cuentas bancarias</h2>
+
+  <p>
+    Conectar una cuenta es <strong>opcional</strong>: puedes usar CIFRA sin
+    hacerlo, aunque la conciliación automática es justamente lo que esa
+    conexión habilita.
+  </p>
+
+  <ul>
+    <li>
+      El permiso es de <strong>solo lectura</strong>. Permite consultar
+      movimientos y saldos. No permite mover fondos.
+    </li>
+    <li>
+      <strong>No almacenamos las credenciales de tu banco</strong>, ni tu
+      contraseña.
+    </li>
+    <li>
+      Puedes <strong>desconectar una cuenta cuando quieras</strong>, desde el
+      propio servicio, sin pedir permiso ni dar explicaciones. La
+      desconexión corta el acceso de inmediato.
+    </li>
+    <li>
+      La disponibilidad de la conexión depende de cada entidad financiera.
+      Si una entidad cambia o suspende su acceso, la conciliación automática
+      de esa cuenta dejará de funcionar y te lo indicaremos.
+    </li>
+  </ul>
+
+  <h2 id="asistente">8. El asistente y la escalera de autonomía</h2>
+
+  <p>
+    CIFRA usa un asistente con inteligencia artificial para proponer a qué
+    factura corresponde cada pago y qué tratamiento darle.
+  </p>
+
+  <p>
+    <strong>El asistente propone; tú apruebas.</strong> Al principio requiere
+    tu aprobación para todo. A medida que apruebas sus propuestas, puede
+    pasar a ejecutar directamente ciertas tareas sin confirmación previa.
+  </p>
+
+  <p>
+    Conviene ser preciso sobre qué cambia en ese proceso, porque es donde se
+    presta a confusión:
+  </p>
+
+  <ul>
+    <li>
+      Lo que cambia es <strong>qué tareas requieren tu aprobación previa</strong>,
+      y solo dentro de tareas de clasificación, conciliación y cálculo.
+    </li>
+    <li>
+      Lo que <strong>nunca</strong> cambia es la capacidad de mover dinero:
+      no existe en ningún nivel de autonomía. No es una regla que podamos
+      levantar, es una limitación técnica del permiso de solo lectura.
+    </li>
+    <li>
+      Puedes <strong>reducir el nivel de autonomía</strong> en cualquier
+      momento.
+    </li>
+    <li>
+      <strong>Toda decisión del asistente queda registrada y es
+      reversible</strong>: qué propuso, en qué se basó, quién la aprobó y
+      cuándo.
+    </li>
+  </ul>
+
+  <p>
+    El asistente puede equivocarse. Las propuestas que apruebas son tuyas, y
+    revisarlas antes de aprobarlas es parte de usar la herramienta.
+  </p>
+
+  <h2 id="apartado">9. Qué significa apartar impuestos</h2>
+
+  <p>
+    Cuando decimos que CIFRA «aparta» la porción de impuestos,
+    <strong>nos referimos a un cálculo contable, no a un movimiento de
+    dinero</strong>.
+  </p>
+
+  <p>
+    CIFRA calcula qué parte de lo que recibiste corresponde a obligaciones
+    tributarias y te la muestra como no disponible, para que el saldo que ves
+    refleje lo que de verdad puedes gastar.
+    <strong>El dinero no se mueve de sitio ni cambia de titular</strong>:
+    sigue en tu cuenta, en tu banco, y puedes disponer de él. Lo que hace
+    CIFRA es informarte, no retenerte nada.
+  </p>
+
+  <h2 id="facturacion">10. Facturación electrónica</h2>
+
+  <p>
+    CIFRA generaría y transmitiría facturas electrónicas a la DIAN a tu
+    nombre y por tu instrucción, conforme a la Resolución DIAN 000165 de 2023
+    y las normas que la modifiquen.
+  </p>
+
+  <ul>
+    <li>
+      <strong>Tú eres el obligado a facturar.</strong> CIFRA es la herramienta
+      con la que lo haces; la responsabilidad sobre el contenido de cada
+      factura es tuya.
+    </li>
+    <li>
+      La información que introduzcas —datos de tu cliente, conceptos, montos,
+      impuestos— debe ser correcta. CIFRA no la verifica contra la realidad de
+      la operación.
+    </li>
+    <li>
+      <span class="pendiente">[PENDIENTE DE DEFINIR]</span> Debe precisarse
+      aquí si la emisión se hace bajo tu propia habilitación ante la DIAN o
+      bajo la de un proveedor tecnológico habilitado, porque cambia quién
+      responde de qué.
+    </li>
+  </ul>
+
+  <h2 id="tributario">11. Los cálculos no son asesoría tributaria</h2>
+
+  <p>
+    Los cálculos de CIFRA son <strong>estimaciones basadas en la información
+    que tú aportas</strong> y en la normativa vigente según nuestro leal saber
+    y entender.
+  </p>
+
+  <ul>
+    <li>
+      No constituyen asesoría tributaria, contable ni legal, y no sustituyen
+      el juicio de un contador público.
+    </li>
+    <li>
+      Tu situación puede tener particularidades que CIFRA no conoce y que
+      cambian el resultado.
+    </li>
+    <li>
+      <strong>La responsabilidad por lo que declares ante la DIAN es
+      tuya</strong>, junto con la del contador que firme.
+    </li>
+  </ul>
+
+  <h2 id="precios">12. Precios y pagos</h2>
+
+  <p>
+    <strong>Hoy CIFRA no cobra nada</strong> porque todavía no presta
+    servicio. Cuando existan planes de pago, esta sección indicará precios,
+    impuestos incluidos, periodicidad, medios de pago aceptados y condiciones
+    de renovación, y te lo comunicaremos antes de que aplique.
+  </p>
+
+  <p>
+    Ningún cambio de precio se aplicará a un período ya pagado.
+  </p>
+
+  <h2 id="retracto">13. Derecho de retracto</h2>
+
+  <p>
+    Cuando existan servicios de pago, tendrás derecho de retracto dentro de
+    los <strong>5 días hábiles</strong> siguientes a la celebración del
+    contrato, y te devolveremos el dinero en un máximo de
+    <strong>30 días calendario</strong>.
+    <span class="norma">(Ley 1480 de 2011, art. 47)</span>
+  </p>
+
+  <p>
+    La ley exceptúa del retracto los servicios cuya prestación ha comenzado
+    con el acuerdo del consumidor. Si al contratar aceptas expresamente que el
+    servicio empiece de inmediato, esa excepción aplicaría. Lo diremos con
+    claridad en el momento de contratar, no en letra pequeña.
+  </p>
+
+  <h2 id="reversion">14. Reversión del pago</h2>
+
+  <p>
+    Si pagas con tarjeta de crédito, débito u otro instrumento electrónico,
+    puedes solicitar la reversión del pago cuando seas víctima de fraude,
+    cuando el servicio no sea prestado, o cuando no corresponda a lo
+    contratado. La solicitud debe presentarse dentro de los
+    <strong>5 días hábiles</strong> siguientes a que tengas noticia del hecho.
+    <span class="norma">(Ley 1480 de 2011, art. 51)</span>
+  </p>
+
+  <h2 id="propiedad">15. Propiedad intelectual</h2>
+
+  <ul>
+    <li>
+      El software, la marca, el diseño y los contenidos de CIFRA son de su
+      titular. Usar el servicio no te transfiere ningún derecho sobre ellos.
+    </li>
+    <li>
+      <strong>Tus datos y tus documentos son tuyos.</strong> No adquirimos
+      propiedad sobre tu información financiera ni sobre tus facturas. Solo
+      la tratamos para prestarte el servicio, en los términos de la política
+      de privacidad.
+    </li>
+    <li>
+      Puedes exportar tu información en un formato legible cuando quieras.
+    </li>
+  </ul>
+
+  <h2 id="disponibilidad">16. Disponibilidad y responsabilidad</h2>
+
+  <p>
+    Haremos lo razonable para que el servicio esté disponible, pero no
+    garantizamos disponibilidad ininterrumpida: habrá mantenimientos, y
+    dependemos de terceros —entidades financieras, la DIAN, proveedores de
+    infraestructura— cuyas caídas no controlamos.
+  </p>
+
+  <p>
+    <strong>No limitamos nuestra responsabilidad por dolo, culpa grave, ni
+    por los derechos que el Estatuto del Consumidor reconoce de forma
+    irrenunciable.</strong> Decir lo contrario no tendría efecto y sería
+    engañoso.
+  </p>
+
+  <p>
+    Fuera de eso, no respondemos por: decisiones que tomes basándote en los
+    cálculos sin verificarlos, errores derivados de información incorrecta que
+    hayas introducido, ni por sanciones que se originen en incumplimientos
+    tuyos ante la autoridad tributaria.
+  </p>
+
+  <h2 id="terminacion">17. Suspensión y terminación</h2>
+
+  <ul>
+    <li>
+      <strong>Puedes cerrar tu cuenta cuando quieras</strong>, sin penalidad.
+    </li>
+    <li>
+      Podemos suspender o terminar tu cuenta si incumples estos términos, si
+      usas el servicio para actividades ilícitas, o si una autoridad
+      competente lo ordena. Te avisaremos y explicaremos el motivo, salvo que
+      la ley lo impida.
+    </li>
+    <li>
+      Al cerrar la cuenta podrás exportar tu información. Después,
+      conservaremos únicamente lo que la ley nos obligue a conservar, según el
+      <a href="/legal/privacidad#conservacion">apartado 14 de la política</a>.
+    </li>
+  </ul>
+
+  <h2 id="cambios">18. Cambios en estos términos</h2>
+
+  <p>
+    Podemos modificar estos términos. Si el cambio es sustancial te lo
+    comunicaremos con antelación razonable al correo registrado. Si no estás
+    de acuerdo, puedes cerrar tu cuenta antes de que el cambio entre en vigor.
+  </p>
+
+  <h2 id="pqr">19. Peticiones, quejas y reclamos</h2>
+
+  <p>
+    Escribe a <span class="pendiente">[CORREO]</span>. Para solicitudes sobre
+    tus datos personales, el procedimiento y los plazos están en el
+    <a href="/legal/datos">Aviso de Privacidad</a>.
+  </p>
+
+  <p>
+    También puedes acudir a la Superintendencia de Industria y Comercio en lo
+    relativo a protección al consumidor y protección de datos personales.
+  </p>
+
+  <h2 id="ley">20. Ley aplicable y jurisdicción</h2>
+
+  <p>
+    Estos términos se rigen por la ley colombiana. Cualquier controversia se
+    someterá a los jueces de la República de Colombia, sin renunciar al fuero
+    que la ley reconoce al consumidor.
+  </p>
+
+  <h2 id="vigencia">21. Vigencia</h2>
+
+  <p>
+    Estos términos rigen desde <span class="pendiente">[FECHA DE VIGENCIA]</span>.
+  </p>
+</LegalLayout>
