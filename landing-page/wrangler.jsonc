@@ -1,0 +1,16 @@
+{
+  // Nombre del proyecto en Cloudflare. Solo identificador interno,
+  // no cambia la URL pública que ya tienes.
+  "name": "cifra-landing",
+
+  // Wrangler exige esta fecha: fija qué versión del runtime de Cloudflare
+  // usa tu proyecto, para que una actualización futura de Cloudflare no
+  // cambie el comportamiento de tu sitio sin que tú lo decidas.
+  "compatibility_date": "2026-09-18",
+
+  // Sin "main": este Worker no tiene código de servidor, solo sirve
+  // archivos estáticos desde la carpeta que generó `astro build`.
+  "assets": {
+    "directory": "./dist"
+  }
+}
