@@ -31,8 +31,16 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 24
-          cache: pnpm
-          cache-dependency-path: landing-page/pnpm-lock.yaml
+      - name: Obtener la ruta del almacen de pnpm
+        id: pnpm-store
+        run: echo "store_path=$(pnpm store path --silent)" >> "$GITHUB_OUTPUT"
+      - name: Cache del almacen de pnpm
+        uses: actions/cache@v4
+        with:
+          path: ${{ steps.pnpm-store.outputs.store_path }}
+          key: pnpm-store-${{ runner.os }}-${{ hashFiles('landing-page/pnpm-lock.yaml') }}
+          restore-keys: |
+            pnpm-store-${{ runner.os }}-
 
       - name: Instalar dependencias
         # --frozen-lockfile falla si el lockfile no coincide con
