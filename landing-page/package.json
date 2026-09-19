@@ -5,6 +5,7 @@
   "engines": {
     "node": ">=22.12.0"
   },
+  "packageManager": "pnpm@9.12.0",
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
@@ -15,10 +16,9 @@
     "astro": "^7.3.3",
     "sharp": "^0.35.4"
   },
-  "allowScripts": {
-    "esbuild": true
-  },
   "devDependencies": {
-    "fontpie": "^0.3.0"
+    "@astrojs/check": "^0.9.10",
+    "fontpie": "^0.3.0",
+    "typescript": "^6.0.3"
   }
 }
