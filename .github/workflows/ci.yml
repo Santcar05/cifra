@@ -1,0 +1,54 @@
+name: CI # El nombre a verse en la pestaña Actions
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+# Si subes dos commits seguidos, cancela la ejecucion anterior:
+# revisar codigo que ya quedo obsoleto es gastar minutos para nada.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  landing:
+    runs-on: ubuntu-latest
+
+    # El repositorio es un monorepo. Todos los comandos de este job
+    # se ejecutan dentro de landing-page.
+    defaults:
+      run:
+        working-directory: landing-page
+
+    steps:
+      - name: Clonar el repositorio
+        uses: actions/checkout@v5
+
+      - name: Habilitar pnpm
+        run: corepack enable
+
+      - name: Instalar Node 24
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+          cache-dependency-path: landing-page/pnpm-lock.yaml
+
+      - name: Instalar dependencias
+        # --frozen-lockfile falla si el lockfile no coincide con
+        # package.json. En CI es lo que quieres: garantiza que se
+        # instala EXACTAMENTE lo mismo que en tu maquina.
+        run: pnpm install --frozen-lockfile
+
+      - name: Comprobar tipos
+        run: pnpm astro check
+
+      - name: Compilar
+        run: pnpm build
+
+      - name: Guardar el resultado
+        uses: actions/upload-artifact@v4
+        with:
+          name: landing-dist
+          path: landing-page/dist
+          retention-days: 7
