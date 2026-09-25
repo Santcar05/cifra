@@ -95,6 +95,17 @@ const pasos = [
             <p class="signup__error" id="correo-error" role="alert" hidden></p>
           </form>
 
+          <div class="toast" id="toast" hidden>
+          <div class="toast__icon">✓</div>
+
+          <div class="toast__content">
+            <p class="toast__title">Correo registrado</p>
+            <p class="toast__body">
+              Te avisaremos cuando abramos el acceso.
+            </p>
+          </div>
+        </div>
+
           <ul class="garantias">
             {garantias.map((g) => (
               <li class="garantia">
@@ -310,6 +321,89 @@ const pasos = [
     color: var(--text-secondary);
   }
 
+  .toast {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+
+  display: flex;
+  align-items: center;
+  gap: 14px;
+
+  max-width: 380px;
+
+  padding: 16px 18px;
+
+  background: var(--surface);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius);
+
+  box-shadow:
+    0 12px 30px rgb(0 0 0 / 0.08);
+
+  z-index: 1000;
+
+  opacity: 0;
+  transform: translateY(14px);
+
+  animation: toast-in 240ms ease forwards;
+}
+
+.toast__icon {
+  width: 34px;
+  height: 34px;
+
+  display: grid;
+  place-items: center;
+
+  border-radius: 999px;
+
+  background: rgb(82 163 115 / 0.12);
+  color: rgb(82 163 115);
+
+  font-weight: 600;
+}
+
+.toast__title {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.toast__body {
+  margin: 2px 0 0;
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.toast--hide {
+  animation: toast-out 220ms ease forwards;
+}
+
+@keyframes toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes toast-out {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  to {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+}
+
   @media (width < 62rem) {
     .empezar__grid {
       grid-template-columns: 1fr;
@@ -327,7 +421,7 @@ const pasos = [
   const form = document.querySelector<HTMLFormElement>('.signup');
   const input = document.querySelector<HTMLInputElement>('#correo');
   const error = document.querySelector<HTMLElement>('#correo-error');
-
+  const toast = document.querySelector<HTMLElement>('#toast');
   if (form && input && error) {
     /**
      * Se distingue ERROR de AVISO a propósito.
@@ -353,7 +447,7 @@ const pasos = [
       input.removeAttribute('aria-invalid');
     };
 
-    form.addEventListener('submit', (e) => {
+    form.addEventListener('submit', async (e) => {
       e.preventDefault();
 
       const value = input.value.trim();
@@ -372,19 +466,48 @@ const pasos = [
         input.focus();
         return;
       }
+clear();
+const showToast = () => {
+  if (!toast) return;
 
-      clear();
+  toast.hidden = false;
+  toast.classList.remove('toast--hide');
 
-      // TODO(backend): enviar al endpoint de alta. Hasta entonces no se
-      // finge un registro correcto — sería mentirle al usuario.
-      show(
-        'El registro todavía no está conectado. Vuelve en unos días.',
-        'aviso',
-      );
+  setTimeout(() => {
+    toast.classList.add('toast--hide');
+
+    setTimeout(() => {
+      toast.hidden = true;
+    }, 220);
+  }, 4500);
+};
+try {
+  // Ya que esta URL es pública y la necesita el cliente, no es necesaria colocarla en un .env. No hay secretos que proteger: el endpoint no hace nada más que recibir un correo y guardarlo en una hoja de cálculo. No hay credenciales ni tokens
+await fetch(
+  'https://script.google.com/macros/s/AKfycbzasxvVgOd6uwVPEsWsjRsGjGnMrdNscfis_tvlyAaQUHLDUMUPRPZKUrMalC1QVbBV/exec',
+  {
+    method: 'POST',
+    body: new URLSearchParams({
+      email: value,
+    }),
+  }
+);
+form.reset();
+showToast();
+
+} catch {
+  show(
+    'No pudimos guardar tu correo. Inténtalo más tarde.',
+    'aviso'
+  );
+}
+      
+      //---
     });
 
     input.addEventListener('input', () => {
       if (!error.hidden) clear();
     });
+    
   }
 </script>
