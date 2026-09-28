@@ -1,4 +1,4 @@
-package test.java.cifra;
+package cifra;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
