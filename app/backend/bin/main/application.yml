@@ -6,8 +6,14 @@ spring:
       enabled: true
   datasource:
     url: jdbc:postgresql://localhost:5432/cifra
-    username: cifra
+    username: cifra_app
+    password: ${CIFRA_APP_PASSWORD:cifra_app_dev_local}
+  flyway:
+    user: cifra
     password: cifra_dev_local
+    placeholders:
+      app_password: ${CIFRA_APP_PASSWORD:cifra_app_dev_local}
+
   jpa:
     open-in-view: false
     hibernate:
