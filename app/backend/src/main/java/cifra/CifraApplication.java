@@ -3,7 +3,9 @@ package cifra;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.modulith.Modulithic;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
+@EnableScheduling
 @Modulithic(systemName = "CIFRA")
 @SpringBootApplication
 public class CifraApplication {

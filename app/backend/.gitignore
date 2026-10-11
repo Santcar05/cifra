@@ -3,3 +3,4 @@ build/
 .idea/
 *.iml
 !gradle/wrapper/gradle-wrapper.jar
+bin/
