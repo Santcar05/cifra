@@ -4,13 +4,15 @@ spring:
   threads:
     virtual:
       enabled: true
+  # Cada credencial se lee de una variable de entorno. El valor tras ':' es el de
+  # desarrollo local (infra/docker-compose.yml) y nunca debe llegar a produccion.
   datasource:
-    url: jdbc:postgresql://localhost:5432/cifra
+    url: ${CIFRA_DB_URL:jdbc:postgresql://localhost:5432/cifra}
     username: cifra_app
     password: ${CIFRA_APP_PASSWORD:cifra_app_dev_local}
   flyway:
-    user: cifra
-    password: cifra_dev_local
+    user: ${CIFRA_FLYWAY_USER:cifra}
+    password: ${CIFRA_FLYWAY_PASSWORD:cifra_dev_local}
     placeholders:
       app_password: ${CIFRA_APP_PASSWORD:cifra_app_dev_local}
 
@@ -44,5 +46,5 @@ server:
 
 cifra:
   propietario:
-    usuario: santiago
-    clave: '{noop}cifra-dev-local'
+    usuario: ${CIFRA_PROPIETARIO_USUARIO:santiago}
+    clave: '${CIFRA_PROPIETARIO_CLAVE:{noop}cifra-dev-local}'
