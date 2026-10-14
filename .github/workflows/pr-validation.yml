@@ -21,7 +21,7 @@ jobs:
         # gitleaks revisa cada commit del pull request, no solo el ultimo:
         # un secreto que se sube y se borra en el commit siguiente sigue
         # estando en la historia, y sigue filtrado.
-        uses: actions/checkout@v5
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
