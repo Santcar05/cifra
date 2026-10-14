@@ -1,0 +1,31 @@
+version: 2
+# Dependabot abre un pull request cuando sale una version nueva de algo que
+# usamos. Cada PR pasa por ci.yml y pr-validation.yml como cualquier otro:
+# si la actualizacion rompe algo, las pruebas lo dicen antes de fusionar.
+updates:
+  - package-ecosystem: gradle
+    directory: /app/backend
+    schedule:
+      interval: weekly
+    groups:
+      # Spring Boot, Modulith y compania se actualizan juntos: un PR, no diez.
+      backend:
+        patterns: ["*"]
+
+  - package-ecosystem: npm
+    directory: /landing-page
+    schedule:
+      interval: weekly
+    groups:
+      landing:
+        patterns: ["*"]
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+
+  - package-ecosystem: docker-compose
+    directory: /infra
+    schedule:
+      interval: weekly
