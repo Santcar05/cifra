@@ -55,7 +55,7 @@ jobs:
         run: pnpm build
 
       - name: Guardar el resultado
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: landing-dist
           path: landing-page/dist
@@ -91,7 +91,7 @@ jobs:
 
       - name: Guardar el informe de pruebas si fallan
         if: failure()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: backend-informe-pruebas
           path: app/backend/build/reports/tests/test
